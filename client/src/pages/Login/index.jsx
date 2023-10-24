@@ -17,10 +17,8 @@ function Login() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: theme.palette.background.alt,
-
                 backgroundImage: `url(${backgroundImage})`, // use the image as background
                 backgroundSize: 'cover', // adjust the background size
-
                 backgroundPosition: 'center', // adjust the background position
             }}
         >
