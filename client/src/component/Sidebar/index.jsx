@@ -91,7 +91,7 @@ const key = [
   { text: "Overview", path: "/dashboard" },
   { text: "Energy Management", path: "/setup" },
   { text: "Device", path: "/visualize" },
-  { text: "Logout", path: "login" },
+  { text: "Logout", path: "/login" },
 ]
 
 export default function NavBar() {
