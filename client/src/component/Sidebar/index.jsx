@@ -19,6 +19,9 @@ import ListItemText from "@mui/material/ListItemText"
 import InboxIcon from "@mui/icons-material/MoveToInbox"
 import MailIcon from "@mui/icons-material/Mail"
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { setLogout } from "state"
+
 
 const drawerWidth = 240
 
@@ -89,15 +92,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
 
 const key = [
   { text: "Overview", path: "/dashboard" },
-  { text: "Energy Management", path: "/setup" },
-  { text: "Device", path: "/visualize" },
+  { text: "Energy Management", path: "/visualize" },
+  { text: "Device", path: "/setup" },
   { text: "Logout", path: "/login" },
 ]
 
-export default function NavBar() {
+export default function SideBar() {
   const navigate = useNavigate()
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
+  const dispatch = useDispatch()
+
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -139,6 +144,12 @@ export default function NavBar() {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
+                {...(item.path === "/login" && {
+                  onClick: () => {
+                    dispatch(setLogout());
+                    navigate(item.path);
+                  },
+                })}
                 to={item.path}
               >
                 <ListItemIcon

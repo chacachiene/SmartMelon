@@ -1,10 +1,17 @@
 import React from 'react';
+import { sensorReducer } from 'state/sensor';
+import { useSelector } from 'react-redux';
+
 
 const Visualize = () => {
+    const sensor = useSelector((state) => state.temp);
+    console.log(sensor);
+
     return (
         <div>
             <h1>Visualize Page</h1>
-            {/* Add your visualization components here */}
+            <p>This is the visualize page.</p>
+            sensor: {sensor}
         </div>
     );
 };

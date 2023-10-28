@@ -1,7 +1,7 @@
 import mqtt from "precompiled-mqtt";
 
 const username = "chacachien";
-const key = "aio_dpXP60nAuSu6Qpl0r0Ov94WG0y8O";
+const key = "aio_VBab50G5rUkfUQn0ObAbMB13V5hb";
 
 const options = {
   port: 443,
@@ -25,7 +25,7 @@ client.on("message", (topic, message, packet) => {
     console.log("received message" + topic+ ': '+ message);
 });
 
-const listDevice = ['led', 'pump', 'temp', 'humi'];
+const listDevice = ['button.led-button', 'button.pump-button', 'temp', 'humi','time.pump-time', 'time.led-time', 'threshold.threshold'];
 
 for(const device of listDevice){
     const url = `${username}/feeds/${device}`;

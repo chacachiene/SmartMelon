@@ -16,6 +16,7 @@ import "./index.css"
 
 function App() {
   const mode = useSelector((state) => state.mode)
+  const user = Boolean(useSelector((state) => state.user))
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
 
   return (
@@ -23,15 +24,23 @@ function App() {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-        <Routes>
-          <Route element={<LayOut />}>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<DashBoard />} />
-            <Route path="/setup" element={<SetUp />} />
-            <Route path="/visualize" element={<Visualize />} />
-            <Route path="/login" element={<Login />} />
-          </Route>
-        </Routes>
+          {user ? (
+              <Routes>
+                <Route element={<LayOut />}>
+                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                  <Route path="/dashboard" element={<DashBoard />} />
+                  <Route path="/setup" element={<SetUp />} />
+                  <Route path="/visualize" element={<Visualize />} />
+                </Route>
+              </Routes>
+            
+          ) : (
+            <Routes>
+              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </Routes>
+          )}
         </ThemeProvider>
       </BrowserRouter>
     </div>

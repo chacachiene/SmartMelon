@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, useMediaQuery } from '@mui/material';
 import { makeStyles } from '@mui/material/styles';
 import Navbar from 'component/Navbar';
-import NavBar from 'component/Sidebar';
+import SideBar from 'component/Sidebar';
 import { Outlet } from 'react-router-dom';
 
 
@@ -16,7 +16,7 @@ const Layout = () => {
     <Box>
       <Navbar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
       <Box sx={{ height: '4rem' ,display:'flex'}} >
-        <NavBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} isPc={isPc} />
+        <SideBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} isPc={isPc} />
         <Outlet />
       </Box>
     </Box>
