@@ -1,11 +1,15 @@
-import React from 'react';
+import { Button } from "@mui/material"
+import React from "react"
+import { useNavigate } from "react-router-dom"
 
 function DashBoard() {
-    return (
-        <div>
-            <h1>Hello, world!</h1>
-        </div>
-    );
+  const navigate = useNavigate()
+  return (
+    <div>
+      <Button onClick={navigate("/setup")}>text</Button>
+      <h1>Hello, world!</h1>
+    </div>
+  )
 }
 
-export default DashBoard;
+export default DashBoard
