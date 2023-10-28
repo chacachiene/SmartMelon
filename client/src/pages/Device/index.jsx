@@ -9,19 +9,20 @@ import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import WaterDropTwoToneIcon from '@mui/icons-material/WaterDropTwoTone';
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 const Devices = () => {
     const natigate = useNavigate()
     return (
         <div>
-            <Stack direction="row" spacing={60}>
+            <Stack direction="row" spacing={40}>
                 <h1>Overview devices</h1>
                 <div>
                 <Stack direction="row" spacing={2}>
                     <Button variant="contained" color="success" size="large">
                     Schedule
                     </Button>
-                    <Button variant="contained" color="success" size="large" onClick={()=>natigate('/sensor')}>
+                    <Button variant="contained" color="success" size="large" onClick={()=>natigate('/device/sensors')}>
                     Sensors
                     </Button>
                     <Button variant="contained" color="success" size="large">
@@ -30,7 +31,9 @@ const Devices = () => {
                 </Stack>
                 </div>
             </Stack>
-
+            <Box height={30} />
+            <Box sx={{display: "flex"}}>
+                <Box component="main" sx={{flexGrow: 1, p: 3}}>
             <Stack spacing={8}>
             <Stack direction="row" spacing={2}>
                 <Card sx={{ minWidth: 200 }}>
@@ -178,6 +181,8 @@ const Devices = () => {
                 </Card>
             </Stack>
             </Stack>
+            </Box>
+            </Box>
         </div>
     );
 };
