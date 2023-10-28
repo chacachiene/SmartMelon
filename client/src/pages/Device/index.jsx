@@ -15,26 +15,28 @@ const Devices = () => {
     const natigate = useNavigate()
     return (
         <div>
-            <Stack direction="row" spacing={40}>
-                <h1>Overview devices</h1>
-                <div>
-                <Stack direction="row" spacing={2}>
-                    <Button variant="contained" color="success" size="large">
-                    Schedule
-                    </Button>
-                    <Button variant="contained" color="success" size="large" onClick={()=>natigate('/device/sensors')}>
-                    Sensors
-                    </Button>
-                    <Button variant="contained" color="success" size="large">
-                    Controlled Devices
-                    </Button>
-                </Stack>
-                </div>
-            </Stack>
-            <Box height={30} />
+            
+            <Box height={10} />
             <Box sx={{display: "flex"}}>
                 <Box component="main" sx={{flexGrow: 1, p: 3}}>
             <Stack spacing={8}>
+                <Stack direction="row" spacing={40}>
+                    <h1>Overview devices</h1>
+                    <div>
+                    <Stack direction="row" spacing={2}>
+                        <Button variant="contained" color="success" size="large">
+                        Schedule
+                        </Button>
+                        <Button variant="contained" color="success" size="large" onClick={()=>natigate('/device/sensors')}>
+                        Sensors
+                        </Button>
+                        <Button variant="contained" color="success" size="large">
+                        Controlled Devices
+                        </Button>
+                    </Stack>
+                    </div>
+                </Stack>
+            
             <Stack direction="row" spacing={2}>
                 <Card sx={{ minWidth: 200 }}>
                     <CardContent>
