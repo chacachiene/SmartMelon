@@ -83,6 +83,13 @@ function SetButton(probs) {
     setSliderEnabled(!sliderEnabled);
   };
 
+  let Color1 = '#FBFF47';
+  let Color2 = '#E6F7FF'
+  if(probs.type === "pump"){
+    Color1="#B3E0FF";
+    Color2='#E6F7FF'
+  }
+
 
   return (
     <Box sx={{
@@ -94,6 +101,9 @@ function SetButton(probs) {
       borderRadius: '10px',
       padding: '20px',
       boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+      width: '200px', // Change the width to your desired size
+      height: '150px',
+      background: `linear-gradient(to bottom, ${Color1}, ${Color2})`,
       }}>
         <h3>{probs.type}</h3>
       <Switch
@@ -102,7 +112,7 @@ function SetButton(probs) {
         inputProps={{ "aria-label": "toggle slider" }}
       />
       {sliderEnabled && (
-        <Box sx={{ width: 300 }}>
+        <Box sx={{ width: 100 }}>
           <Slider
             aria-label="Restricted values"
             // defaultValue={probs.value}

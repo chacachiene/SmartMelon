@@ -3,9 +3,13 @@ import { Grid, Typography, Slider } from "@mui/material"
 import { Formik, Form, Field } from "formik"
 import { useState } from "react"
 import Proptype from "prop-types"
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import AlarmRoundedIcon from '@mui/icons-material/AlarmRounded';
 
 import FormikFieldDateTimePicker from "component/FormikFieldDateTimePicker/FormikFieldDateTimePicker"
 import { publish } from "database/mqtt"
+import { style } from "@mui/system"
 
 const initialValues = {
   from: "2023-10-30T14:00:000.00",
@@ -76,7 +80,7 @@ const SetTimer = (probs) => {
   return (
     <Formik onSubmit={handleSubmit} initialValues={initialValues}>
       {({ values, errors }) => (
-        <Form style={{ margin: 16 }}>
+        <Form style={{ margin: 16, width: '500px', }}>
           <Grid container spacing={0}>
             <Grid container spacing={0}>
               <Grid item xs={12}>
@@ -113,7 +117,16 @@ const SetTimer = (probs) => {
               <pre>{JSON.stringify({ errors, values }, null, 2)}</pre>
             </Grid>
           </Grid> */}
-
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',  // Center horizontally
+            alignItems: 'center',      // Center vertically
+            height: '100px',          // Optionally, set the height for vertical centering
+          }}>
+            <AlarmRoundedIcon style={{ width: '50px', height: '50px' }}/>
+          </div>
+          
+          
           <Slider
             name="level"
             aria-label="Restricted values"
@@ -127,8 +140,16 @@ const SetTimer = (probs) => {
             marks={marks}
           />
 
-          <button type="reset">Reset</button>
-          <button type="submit">Submit</button>
+          <Stack Stack spacing={2} direction="row">
+            <Button variant="contained" disabled>
+              Reset
+            </Button>
+            <Button variant="contained" color="success" size="large">
+            Submit
+            </Button>
+          </Stack>
+
+          
         </Form>
       )}
     </Formik>
