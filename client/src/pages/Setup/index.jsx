@@ -49,8 +49,6 @@ function SetUp() {
           <SetTimer type="light" value="0" />
         </Stack>
       </Stack>
-        <SetButton type="light" value={lightButton} func={setLightButton} />
-        <SetTimer type="light" value="0" />
       </LocalizationProvider>
     </div>
   )
