@@ -19,6 +19,13 @@ import ListItemText from "@mui/material/ListItemText"
 import InboxIcon from "@mui/icons-material/MoveToInbox"
 import MailIcon from "@mui/icons-material/Mail"
 import { useNavigate } from "react-router-dom"
+import {
+  Assessment,
+  AssessmentOutlined,
+  ManageSearchOutlined,
+  MemoryOutlined,
+  PowerSettingsNewOutlined,
+} from "@mui/icons-material"
 
 const drawerWidth = 240
 
@@ -147,7 +154,12 @@ export default function NavBar() {
                     mr: open ? 3 : "auto",
                     justifyContent: "center",
                   }}
-                ></ListItemIcon>
+                >
+                  {item.text === "Overview" && <AssessmentOutlined />}
+                  {item.text === "Energy Management" && <ManageSearchOutlined />}
+                  {item.text === "Device" && <MemoryOutlined />}
+                  {item.text === "Logout" && <PowerSettingsNewOutlined />}
+                </ListItemIcon>
                 <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
