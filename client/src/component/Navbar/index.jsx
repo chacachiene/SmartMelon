@@ -31,7 +31,7 @@ function NavBar() {
   const [isPcMenu, setIsPcMenu] = useState(true)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.auth.user)
   const isPc = useMediaQuery("(min-width: 1000px)")
   const theme = useTheme()
   const dark = theme.palette.neutral.dark

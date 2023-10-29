@@ -4,10 +4,13 @@ import client from "database/mqtt.js";
 import { publish } from "database/mqtt.js";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-import { useSelector } from "react-redux";
+
 import { useDispatch } from "react-redux";
 import Proptype from "prop-types";
 import Switch from "@mui/material/Switch";
+
+//test
+
 
 const marks = [
   {
@@ -42,18 +45,24 @@ function valueLabelFormat(value) {
 
 function SetButton(probs) {
   const dispatch = useDispatch();
-  const but = useSelector((state) => state.pumpButton);
+
   
   const [sliderEnabled, setSliderEnabled] = useState(true);
 
   client.on("message", (topic, message, packet) => {
     console.log("received message" + topic + ": " + message);
+    if (topic === "button.pump-button") {
+      dispatch(probs.func(parseInt(message)));
+    } 
   });
 
   const handleSliderChange = (event, newValue) => {
     dispatch(probs.func(newValue));
+    console.log("newValue: " + newValue);
     if (probs.type === "pump") {
+      console.log("public pump");
       publish("button.pump-button", newValue.toString());
+
     } else if (probs.type === "light") {
       publish("button.led-button", newValue.toString());
     }
@@ -64,8 +73,11 @@ function SetButton(probs) {
 
   const handleToggleSlider = () => {
     if (probs.type === "pump") {
+      dispatch(probs.func(0));
       publish("button.pump-button", "0");
+      console.log('aaaa')
     } else if (probs.type === "light") {
+      dispatch(probs.func(0));
       publish("button.led-button", "0");
     }
     setSliderEnabled(!sliderEnabled);
@@ -92,10 +104,9 @@ function SetButton(probs) {
       {sliderEnabled && (
         <Box sx={{ width: 300 }}>
           <Slider
-            
             aria-label="Restricted values"
-            defaultValue={probs.value}
-            value={but}
+            // defaultValue={probs.value}
+            value={probs.value}
             onChange={handleSliderChange}
             valueLabelFormat={valueLabelFormat}
             getAriaValueText={valuetext}
@@ -111,12 +122,12 @@ function SetButton(probs) {
 
 SetButton.propTypes = {
   type: Proptype.string,
-  value: Proptype.string,
+  value: Proptype.number,
   func: Proptype.func,
 };
 SetButton.defaultProps = {
   type: "pump",
-  value: '0',
+  value: 0,
   func: () => {},
 };
 

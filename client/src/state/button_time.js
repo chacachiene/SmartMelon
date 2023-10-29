@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     pumpButton: 0,
-    lightButton:  0
+    lightButton:  0,
 };
 
 export const buttonReducer = createSlice({

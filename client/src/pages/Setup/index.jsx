@@ -7,47 +7,27 @@ import { setPumpButton, setLightButton } from "state/button_time"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { publish } from "database/mqtt.js"
-import ThresHold from "component/ThresHold"
+import ThresHold from "component/ThresholdForm"
 import sensorAPI from "database/http/sensorAPI"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 //get the value of the light and pump
+import { getLastValue } from "database/http/getAdaData"
 
 function SetUp() {
-    const dispatch = useDispatch()
-    const pumpButton = useSelector((state) => state.pumpButton)
-    
-    
-  const handleThresHoldSubmit = (value, type) => {
-    console.log(value)
-    const sub = type + value.field1.toString() + "_" + value.field2.toString()
-    console.log(sub)
-    publish("threshold.threshold", sub)
-  }
-
-  const handleButtonSubmit = (value, type) => {
-    console.log(value)
-    const sub = type + value.field1.toString() + "_" + value.field2.toString()
-    console.log(sub)
-    publish("threshold.threshold", sub)
-  }
-  const handleTimerSubmit = (value, type) => {
-    console.log(value)
-    const sub = type + value.field1.toString() + "_" + value.field2.toString()
-    console.log(sub)
-    publish("threshold.threshold", sub)
-  }
+  const dispatch = useDispatch()
+  const pumpButton = useSelector((state) => state.button.pumpButton)
+  const lightButton = useSelector((state) => state.button.lightButton)
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await sensorAPI.getLastValue('button.pump-button')
-        console.log(result)
-
-        console.log(result.value)
-        dispatch(setPumpButton(result.value))
+      const pumpStatus = await getLastValue("button.pump-button")
+      dispatch(setPumpButton(pumpStatus))
+      const lightStatus = await getLastValue("button.led-button")
+      dispatch(setLightButton(lightStatus))
     }
     fetchData()
-    }, [pumpButton])
+  }, [])
 
   return (
     <div>
@@ -57,7 +37,7 @@ function SetUp() {
         <SetButton type="pump" value={pumpButton} func={setPumpButton} />
         <SetTimer type="pump" value="0" />
 
-        <SetButton type="light" value="0" func={setLightButton} />
+        <SetButton type="light" value={lightButton} func={setLightButton} />
         <SetTimer type="light" value="0" />
       </LocalizationProvider>
     </div>

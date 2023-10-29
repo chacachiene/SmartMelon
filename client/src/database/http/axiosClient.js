@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const client = axios.create({
-  baseURL: "https://io.adafruit.com/api/v2/",
+  baseURL: process.env.REACT_APP_ADAFRUIT_URL,
 
   headers: {
     "Content-Type": "application/json",

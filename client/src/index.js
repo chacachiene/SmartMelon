@@ -2,8 +2,8 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import App from "./App"
 import authReducer from "./state"
-import buttonReducer from "./state/button_time"
-import sensor from "state/sensor"
+import buttonReducer from "state/button_time"
+import sensorReducer from "state/sensor"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import {
@@ -19,14 +19,22 @@ import {
 import storage from "redux-persist/lib/storage"
 import { PersistGate } from "redux-persist/integration/react"
 
+import { combineReducers } from "redux";
+
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
 }
-const persistedReducer = persistReducer(persistConfig, authReducer)
+
+const rootReducer = combineReducers({
+  auth: persistReducer(persistConfig, authReducer),
+  button: buttonReducer,
+  sensor: sensorReducer,
+});
+
 const store = configureStore({
-  reducer: persistedReducer, buttonReducer, sensor,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
