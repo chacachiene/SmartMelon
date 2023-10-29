@@ -28,7 +28,7 @@ const SetUp = () => {
             <Grid container spacing={2}>
                 <Grid item xs={7} xl={7}>
                     <Paper>
-                        <Grid container spacing={2}>
+                        <Grid container spacing={2} >
                             <Grid item xs={6} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                 <Square
                                     selected={selectedSquare === 1}
@@ -45,13 +45,14 @@ const SetUp = () => {
                                     onClick={() => handleSquareClick(2)}
                                 >
                                     <h3>Ligthning Sensor</h3>
-                                    <TungstenOutlined color='action' style={{ fontSize: '120px' }} />
+                                    <TungstenOutlined color='warning' style={{ fontSize: '120px' }} />
                                 </Square>
                             </Grid>
                             <Grid item xs={6} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                 <Square
                                     selected={selectedSquare === 3}
                                     onClick={() => handleSquareClick(3)}
+                                    style={{ marginBottom: "30px" }}
                                 >
                                     <h3>Ligthning Sensor</h3>
                                     <WaterDropOutlined color='primary' style={{ fontSize: '120px' }} />
@@ -61,9 +62,10 @@ const SetUp = () => {
                                 <Square
                                     selected={selectedSquare === 4}
                                     onClick={() => handleSquareClick(4)}
+                                    style={{ marginBottom: "30px" }}
                                 >
                                     <h3>Ligthning Sensor</h3>
-                                    <DeviceThermostatOutlined color='action' style={{ fontSize: '120px' }} />
+                                    <DeviceThermostatOutlined color='error' style={{ fontSize: '120px' }} />
                                 </Square>
                             </Grid>
                         </Grid>
@@ -73,17 +75,17 @@ const SetUp = () => {
                     <Paper>
                         <Grid container spacing={3}>
                             <Grid item xs={12} xl={12} xm={12} style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                Solid Moisure Sensor
+                                <h4 sx={{ color: "red" }}>Solid Moisure Sensor</h4>
                             </Grid>
                             <Grid item xs={4} xl={4} xm={4} style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                                <Typography>Uper Threshhold: </Typography>
+                                <Typography fontWeight={'bold'}>Uper Threshhold: </Typography>
                             </Grid>
                             <Grid item xs={8} xl={8} xm={8} >
 
                                 <AdjustComponent />
                             </Grid>
                             <Grid item xs={4} xl={4} xm={4} style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                                <Typography>Lower Threshhold: </Typography>
+                                <Typography fontWeight={'bold'}>Lower Threshhold: </Typography>
                             </Grid>
                             <Grid item xs={8} xl={8} xm={8} >
 
