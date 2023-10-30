@@ -5,17 +5,34 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-const Sensors = () => {
-    const listName = [
-        { label: 'DHT20'},
-    ]
+import ControlledDeviceList from './ControlledDevice';
+const Sensors = (props) => {
+    let listName;
+    if (props.type === "Sensor") {
+        listName = [
+            { label: 'DHT20' },
+        ];
+    } else {
+        listName = [
+            { label: 'Water pump' },
+        ];
+    }
+    
+    let contentToRender;
+
+    if (props.type === "Sensor") {
+        contentToRender = <SensorList />;
+    } else {
+        contentToRender = <ControlledDeviceList />;
+    }   
+
     return (
         <div>
             <Box height={10} />
             <Box sx={{display: "flex"}}>
                 <Box component="main" sx={{flexGrow: 1, p: 3}}>
                     <Stack direction="row" spacing={40}>
-                        <h1>Sensors Status</h1>
+                        <h1>{props.type} Status</h1>
                         <div>
                         <Stack direction="row" spacing={2}>
                             <Autocomplete
@@ -26,10 +43,10 @@ const Sensors = () => {
                             renderInput={(params) => <TextField {...params} label="Name" />}
                             />
                             <Button variant="contained" color="success" size="large" >
-                            Add Sensors
+                            Add
                             </Button>
                             <Button variant="contained" color="success" size="large">
-                            Delete Sensors
+                            Delete
                             </Button>
                         </Stack>
                         </div>
@@ -45,7 +62,7 @@ const Sensors = () => {
             <Box height={30} />
             <Box sx={{display: "flex"}}>
                 <Box component="main" sx={{flexGrow: 1, p: 3}}>
-                    <SensorList />
+                    {contentToRender}
                 </Box>
             </Box>
             </Box>

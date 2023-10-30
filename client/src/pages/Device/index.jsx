@@ -24,13 +24,13 @@ const Devices = () => {
                     <h1>Overview devices</h1>
                     <div>
                     <Stack direction="row" spacing={2}>
-                        <Button variant="contained" color="success" size="large">
+                        <Button variant="contained" color="success" size="large" onClick={()=>natigate('/setup')}>
                         Schedule
                         </Button>
                         <Button variant="contained" color="success" size="large" onClick={()=>natigate('/device/sensors')}>
                         Sensors
                         </Button>
-                        <Button variant="contained" color="success" size="large">
+                        <Button variant="contained" color="success" size="large" onClick={()=>natigate('/device/controlledDevice')}>
                         Controlled Devices
                         </Button>
                     </Stack>

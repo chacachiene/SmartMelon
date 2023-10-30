@@ -7,7 +7,7 @@ const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
   { field: 'name', headerName: 'Name', width: 150 },
   { field: 'position', headerName: 'Position', width: 150 },
-  { field: 'data', headerName: 'Data' ,width: 150 },
+  { field: 'data', headerName: 'Operation Time' ,width: 150 },
   { field: 'state', headerName: 'Working State', width: 150,},
   {
     field: 'Control',
@@ -26,15 +26,15 @@ const columns = [
 ];
 
 const rows = [
-  { id: 1,name: 'DHT20' ,state: 'Normal', position: '1', data: '30°C/45%' },
-  { id: 2,name: 'DHT20' , state: 'Normal', position: '2', data: '30°C/45%' },
-  { id: 3,name: 'DHT20' , state: 'Normal', position: '3', data: '30°C/45%' },
-  { id: 4,name: 'DHT20' , state: 'Normal', position: '4', data: '30°C/45%' },
-  { id: 5,name: 'DHT20' , state: 'Inactive', position: '5', data: 'null' },
-  { id: 6,name: 'DHT20' , state: 'Normal', position: '6', data: '30°C/45%' },
-  { id: 7,name: 'DHT20' , state: 'Normal', position: '7', data: '30°C/45%' },
-  { id: 8,name: 'DHT20' , state: 'Normal', position: '8', data: '30°C/45%' },
-  { id: 9 ,name: 'DHT20', state: 'Normal', position: '9', data: '30°C/45%' },
+  { id: 1,name: 'Water Pump' ,state: 'Normal', position: '1', data: '10 days' },
+  { id: 2,name: 'Water Pump' , state: 'Normal', position: '2', data: '10 days' },
+  { id: 3,name: 'Water Pump' , state: 'Normal', position: '3', data: '10 days' },
+  { id: 4,name: 'Water Pump' , state: 'Normal', position: '4', data: '10 days' },
+  { id: 5,name: 'Water Pump' , state: 'Inactive', position: '5', data: 'null' },
+  { id: 6,name: 'Water Pump' , state: 'Normal', position: '6', data: '10 days' },
+  { id: 7,name: 'Water Pump' , state: 'Normal', position: '7', data: '10 days' },
+  { id: 8,name: 'Water Pump' , state: 'Normal', position: '8', data: '10 days' },
+  { id: 9 ,name: 'Water Pump', state: 'Normal', position: '9', data: '10 days' },
 ];
 
 const handleTurnOnOff = (id) => {
@@ -43,7 +43,7 @@ const handleTurnOnOff = (id) => {
     // For example, you can use state management like React's useState and useEffect here.
   };
 
-export default function SensorList() {
+export default function ControlledDeviceList() {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
