@@ -19,9 +19,20 @@ import ListItemText from "@mui/material/ListItemText"
 import InboxIcon from "@mui/icons-material/MoveToInbox"
 import MailIcon from "@mui/icons-material/Mail"
 import { useNavigate } from "react-router-dom"
+
 import { useDispatch } from "react-redux"
 import { setLogout } from "state"
 
+
+import {
+  Assessment,
+  AssessmentOutlined,
+  ManageSearchOutlined,
+  MemoryOutlined,
+  PowerSettingsNewOutlined,
+  TuneOutlined,
+
+} from "@mui/icons-material"
 
 const drawerWidth = 240
 
@@ -94,6 +105,7 @@ const key = [
   { text: "Overview", path: "/dashboard" },
   { text: "Energy Management", path: "/visualize" },
   { text: "Device", path: "/setup" },
+  { text: "Control", path: "/control" },
   { text: "Logout", path: "/login" },
 ]
 
@@ -158,7 +170,13 @@ export default function SideBar() {
                     mr: open ? 3 : "auto",
                     justifyContent: "center",
                   }}
-                ></ListItemIcon>
+                >
+                  {item.text === "Overview" && <AssessmentOutlined />}
+                  {item.text === "Energy Management" && <ManageSearchOutlined />}
+                  {item.text === "Device" && <MemoryOutlined />}
+                  {item.text === "Control" && <TuneOutlined />}
+                  {item.text === "Logout" && <PowerSettingsNewOutlined />}
+                </ListItemIcon>
                 <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>

@@ -32,7 +32,7 @@ function NavBar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector((state) => state.auth.user)
-  const isPc = useMediaQuery("(min-width: 1000px)")
+  const isPc = useMediaQuery("(min-width: 600px)")
   const theme = useTheme()
   const dark = theme.palette.neutral.dark
   const neutrallight = theme.palette.neutral.light
@@ -48,10 +48,11 @@ function NavBar() {
         fontWeight="bold"
         fontSize="clamp(1.5rem, 2vw, 2rem)"
         color="primary"
+        paddingLeft = "2rem"
         onclick={() => navigate("/dashboard")}
         sx={{
           "&:hover": {
-            color: priLight,
+            color: neutrallight,
             cursor: "pointer",
           },
         }}

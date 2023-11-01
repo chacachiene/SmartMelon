@@ -43,7 +43,6 @@ const listDevice = [
   "threshold",
 ]
 
-
 for (const device of listDevice) {
   const url = `${username}/feeds/${device}`
   const subscribeCallback = () => {

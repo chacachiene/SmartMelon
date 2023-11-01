@@ -3,12 +3,12 @@ import { Grid, Typography, Slider } from "@mui/material"
 import { Formik, Form, Field } from "formik"
 import { useState } from "react"
 import Proptype from "prop-types"
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import AlarmRoundedIcon from '@mui/icons-material/AlarmRounded';
+import Stack from "@mui/material/Stack"
+import Button from "@mui/material/Button"
+import AlarmRoundedIcon from "@mui/icons-material/AlarmRounded"
 
 import FormikFieldDateTimePicker from "component/FormikFieldDateTimePicker/FormikFieldDateTimePicker"
-import { publish } from "database/mqtt"
+import { publish } from "database/mqtt/mqtt"
 import { style } from "@mui/system"
 
 const initialValues = {
@@ -50,7 +50,7 @@ function valueLabelFormat(value) {
   return marks.findIndex((mark) => mark.value === value)
 }
 
-const SetTimer = (probs) => {
+const SetTimer = (props) => {
   const [sliderValue, setSliderValue] = useState(initialValues.level)
 
   const handleSliderChange = (event, newValue) => {
@@ -67,10 +67,16 @@ const SetTimer = (probs) => {
       console.log("Invalid time range")
       alert("End time must be greater than or equal to start time")
     } else {
-      if (probs.type === "pump") {
-        publish("pump-time", fromTime.toString() + "_" + toTime.toString()+'*'+sliderValue.toString())
-      } else if (probs.type === "light") {
-        publish("led-time", fromTime.toString() + "_" + toTime.toString()+ '*' + sliderValue.toString())
+      if (props.type === "pump") {
+        publish(
+          "pump-time",
+          fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString(),
+        )
+      } else if (props.type === "light") {
+        publish(
+          "led-time",
+          fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString(),
+        )
       } else {
         console.log("error")
       }
@@ -80,12 +86,12 @@ const SetTimer = (probs) => {
   return (
     <Formik onSubmit={handleSubmit} initialValues={initialValues}>
       {({ values, errors }) => (
-        <Form style={{ margin: 16, width: '500px', }}>
+        <Form style={{ margin: 16, width: "500px" }}>
           <Grid container spacing={0}>
             <Grid container spacing={0}>
               <Grid item xs={12}>
                 <Typography variant="subtitle1" gutterBottom style={mb}>
-                  Setting time for {probs.type}
+                  Setting time for {props.type}
                 </Typography>
               </Grid>
             </Grid>
@@ -117,16 +123,17 @@ const SetTimer = (probs) => {
               <pre>{JSON.stringify({ errors, values }, null, 2)}</pre>
             </Grid>
           </Grid> */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',  // Center horizontally
-            alignItems: 'center',      // Center vertically
-            height: '100px',          // Optionally, set the height for vertical centering
-          }}>
-            <AlarmRoundedIcon style={{ width: '50px', height: '50px' }}/>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center", // Center horizontally
+              alignItems: "center", // Center vertically
+              height: "100px", // Optionally, set the height for vertical centering
+            }}
+          >
+            <AlarmRoundedIcon style={{ width: "50px", height: "50px" }} />
           </div>
-          
-          
+
           <Slider
             name="level"
             aria-label="Restricted values"
@@ -141,15 +148,14 @@ const SetTimer = (probs) => {
           />
 
           <Stack Stack spacing={2} direction="row">
-            <Button variant="contained" disabled>
+            <Button type='reset' variant="contained" >
               Reset
             </Button>
-            <Button variant="contained" color="success" size="large">
-            Submit
+            <Button type='submit' variant="contained" color="success" size="large" >
+              Submit
             </Button>
+            
           </Stack>
-
-          
         </Form>
       )}
     </Formik>

@@ -1,64 +1,62 @@
-import React, { useState } from "react";
-import client from "./mqtt.js";
-import { publish } from "./mqtt.js";
-import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
-
-
+import React, { useState } from "react"
+import client from "./mqtt/mqtt.js"
+import { publish } from "./mqtt/mqtt.js"
+import Box from "@mui/material/Box"
+import Slider from "@mui/material/Slider"
 
 const marks = [
   {
     value: 0,
-    label: '0',
+    label: "0",
   },
   {
     value: 50,
-    label: '1',
+    label: "1",
   },
   {
     value: 75,
-    label: '2',
+    label: "2",
   },
   {
     value: 100,
-    label: '3',
+    label: "3",
   },
-];
+]
 
 function valuetext(value) {
-  return `${value}°C`;
+  return `${value}°C`
 }
 
 function valueLabelFormat(value) {
-  return marks.findIndex((mark) => mark.value === value) ;
+  return marks.findIndex((mark) => mark.value === value)
 }
 
 function App() {
-  const [led, setLed] = useState(false);
-  const [sliderValue, setSliderValue] = useState(0);
-  const tmp = "0";
+  const [led, setLed] = useState(false)
+  const [sliderValue, setSliderValue] = useState(0)
+  const tmp = "0"
 
   client.on("message", (topic, message, packet) => {
-    console.log("received message" + topic + ": " + message);
-  });
+    console.log("received message" + topic + ": " + message)
+  })
 
   const handleSliderChange = (event, newValue) => {
-    setSliderValue(newValue);
-    publish("pump", newValue.toString());
-  };
+    setSliderValue(newValue)
+    publish("pump", newValue.toString())
+  }
 
   const handleClick = () => {
-    publish("temp", tmp.toString());
-  };
+    publish("temp", tmp.toString())
+  }
 
   const handleClickLight = () => {
-    setLed(!led);
-    var submit = "0";
+    setLed(!led)
+    var submit = "0"
     if (led == true) {
-      submit = "1";
+      submit = "1"
     }
-    publish("led", submit);
-  };
+    publish("led", submit)
+  }
 
   return (
     <div className="App">
@@ -80,7 +78,7 @@ function App() {
         />
       </Box>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

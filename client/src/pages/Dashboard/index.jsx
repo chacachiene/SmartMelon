@@ -3,7 +3,7 @@ import React from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { setHumiSensor, setLightSensor, setTempSensor, setMoisSensor } from "state/sensor"
-import client from "database/mqtt"
+import client from "database/mqtt/mqtt"
 import { useEffect } from "react"
 import { getLastValue } from "database/http/getAdaData"
 
@@ -37,14 +37,19 @@ function DashBoard() {
   // get the last value of the sensor feed when the page is loaded
   useEffect(() => {
     const fetchData = async () => {
-      const temp_humi = await getLastValue("temp-humi")
-      const [temp, humi] = temp_humi.toString().split(":")
-      const moisData = await getLastValue("soil-moisture")
-      const lightData = await getLastValue("light-sensor")
-      dispatch(setTempSensor(parseFloat(temp)))
-      dispatch(setHumiSensor(parseFloat(humi)))
-      dispatch(setLightSensor(lightData))
-      dispatch(setMoisSensor(moisData))
+      try {
+        const temp_humi = await getLastValue("temp-humi")
+        const [temp, humi] = temp_humi.toString().split(":")
+        const moisData = await getLastValue("soil-moisture")
+        const lightData = await getLastValue("light-sensor")
+
+        dispatch(setTempSensor(parseFloat(temp)))
+        dispatch(setHumiSensor(parseFloat(humi)))
+        dispatch(setLightSensor(lightData))
+        dispatch(setMoisSensor(moisData))
+      } catch (err) {
+        console.log(err)
+      }
     }
     fetchData()
   }, [])

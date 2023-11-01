@@ -2,13 +2,13 @@ import React from "react"
 import { Formik, Form, Field } from "formik"
 import { useState } from "react"
 import PropTypes from "prop-types"
-import { publish } from "database/mqtt"
+import { publish } from "database/mqtt/mqtt"
 
 function ThresHold(props) {
   const [formValues, setFormValues] = useState(null)
 
   const handleSubmit = (values) => {
-    values =  props.type+values.field1 + "_" + values.field2
+    values = props.type + values.field1 + "_" + values.field2
     const { onSubmit } = props
     if (onSubmit) {
       onSubmit(values, props.type)
