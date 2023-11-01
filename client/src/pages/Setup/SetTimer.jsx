@@ -59,7 +59,7 @@ const SetTimer = (probs) => {
 
   const handleSubmit = (values, { setSubmitting }) => {
     console.log(values)
-
+    console.log(sliderValue)
     let fromTime = values.from.slice(0, -7)
     let toTime = values.to.slice(0, -7)
 
@@ -68,9 +68,9 @@ const SetTimer = (probs) => {
       alert("End time must be greater than or equal to start time")
     } else {
       if (probs.type === "pump") {
-        publish("time.pump-time", fromTime.toString() + "_" + toTime.toString())
+        publish("pump-time", fromTime.toString() + "_" + toTime.toString()+'*'+sliderValue.toString())
       } else if (probs.type === "light") {
-        publish("time.led-time", fromTime.toString() + "_" + toTime.toString())
+        publish("led-time", fromTime.toString() + "_" + toTime.toString()+ '*' + sliderValue.toString())
       } else {
         console.log("error")
       }

@@ -15,18 +15,32 @@ import {Stack} from "@mui/material"
 
 //get the value of the light and pump
 import { getLastValue } from "database/http/getAdaData"
+import client from "database/mqtt.js"
 
 function SetUp() {
   const dispatch = useDispatch()
   const pumpButton = useSelector((state) => state.button.pumpButton)
   const lightButton = useSelector((state) => state.button.lightButton)
 
+  client.on("message", (topic, message, packet) => {
+    console.log("received message " + topic + ": " + message);
+    const lastSlashIndex = topic.toString().lastIndexOf("/")
+    const name = topic.toString().substring(lastSlashIndex + 1)
+    if (name === "pump-button") {
+      dispatch(setPumpButton(parseInt(message)));
+
+    } else if (name === "led-button") {
+      dispatch(setLightButton(parseInt(message)));
+    }
+  });
+
+
   useEffect(() => {
     const fetchData = async () => {
-      const pumpStatus = await getLastValue("button.pump-button")
-      dispatch(setPumpButton(pumpStatus))
-      const lightStatus = await getLastValue("button.led-button")
-      dispatch(setLightButton(lightStatus))
+      const pumpStatus = await getLastValue("pump-button")
+      dispatch(setPumpButton(parseInt(pumpStatus)))
+      const lightStatus = await getLastValue("led-button")
+      dispatch(setLightButton(parseInt(lightStatus)))
     }
     fetchData()
   }, [])
