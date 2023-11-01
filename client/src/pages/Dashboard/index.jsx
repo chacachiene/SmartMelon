@@ -16,16 +16,18 @@ function DashBoard() {
 
   // listen when the sensor feed change value
   client.on("message", (topic, message, packet) => {
+    console.log("aaaaa")
     const lastSlashIndex = topic.toString().lastIndexOf("/")
     const name = topic.toString().substring(lastSlashIndex + 1)
+    console.log("name is: ", name)
     if (name === "light-sensor") {
       dispatch(setLightSensor(parseInt(message)))
     }
     if (name === "soil-moisture") {
-      console.log('mois is: ', parseInt(message))
+      console.log("mois is: ", parseInt(message))
       dispatch(setMoisSensor(parseInt(message)))
     }
-    if (name === "temp") {
+    if (name === "temp-humi") {
       const [temp, humi] = message.toString().split(":")
       dispatch(setTempSensor(parseFloat(temp)))
       dispatch(setHumiSensor(parseFloat(humi)))
@@ -35,7 +37,7 @@ function DashBoard() {
   // get the last value of the sensor feed when the page is loaded
   useEffect(() => {
     const fetchData = async () => {
-      const temp_humi = await getLastValue("temp")
+      const temp_humi = await getLastValue("temp-humi")
       const [temp, humi] = temp_humi.toString().split(":")
       const moisData = await getLastValue("soil-moisture")
       const lightData = await getLastValue("light-sensor")

@@ -5,7 +5,7 @@ import { publish } from "database/mqtt.js";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Proptype from "prop-types";
 import Switch from "@mui/material/Switch";
 
@@ -43,28 +43,22 @@ function valueLabelFormat(value) {
   return marks.findIndex((mark) => mark.value === value) ;
 }
 
-function SetButton(probs) {
+function SetButton(props) {
   const dispatch = useDispatch();
-
   
-  const [sliderEnabled, setSliderEnabled] = useState(true);
+  
 
-  client.on("message", (topic, message, packet) => {
-    console.log("received message" + topic + ": " + message);
-    if (topic === "button.pump-button") {
-      dispatch(probs.func(parseInt(message)));
-    } 
-  });
+  const [sliderEnabled, setSliderEnabled] = useState(true && Boolean(props.value != 0));
 
   const handleSliderChange = (event, newValue) => {
-    dispatch(probs.func(newValue));
+    dispatch(props.func(newValue));
     console.log("newValue: " + newValue);
-    if (probs.type === "pump") {
+    if (props.type === "pump") {
       console.log("public pump");
-      publish("button.pump-button", newValue.toString());
+      publish("pump-button", newValue.toString());
 
-    } else if (probs.type === "light") {
-      publish("button.led-button", newValue.toString());
+    } else if (props.type === "light") {
+      publish("led-button", newValue.toString());
     }
     else{
       console.log("error");
@@ -72,13 +66,13 @@ function SetButton(probs) {
   };
 
   const handleToggleSlider = () => {
-    if (probs.type === "pump") {
-      dispatch(probs.func(0));
-      publish("button.pump-button", "0");
+    if (props.type === "pump") {
+      dispatch(props.func(0));
+      publish("pump-button", "0");
       console.log('aaaa')
-    } else if (probs.type === "light") {
-      dispatch(probs.func(0));
-      publish("button.led-button", "0");
+    } else if (props.type === "light") {
+      dispatch(props.func(0));
+      publish("led-button", "0");
     }
     setSliderEnabled(!sliderEnabled);
   };
@@ -95,7 +89,7 @@ function SetButton(probs) {
       padding: '20px',
       boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
       }}>
-        <h3>{probs.type}</h3>
+        <h3>{props.type}</h3>
       <Switch
         checked={sliderEnabled}
         onChange={handleToggleSlider}
@@ -105,8 +99,8 @@ function SetButton(probs) {
         <Box sx={{ width: 300 }}>
           <Slider
             aria-label="Restricted values"
-            // defaultValue={probs.value}
-            value={probs.value}
+            defaultValue={props.value}
+            value={props.value}
             onChange={handleSliderChange}
             valueLabelFormat={valueLabelFormat}
             getAriaValueText={valuetext}

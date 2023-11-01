@@ -8,7 +8,7 @@ const Threshold = () => {
         setShowForm(formId === showForm ? null : formId);
     };
     const handleSubmit = (values) => {
-        publish("threshold.threshold", values);
+        publish("threshold", values);
     }
 
     const formObjects = [
