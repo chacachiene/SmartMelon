@@ -79,7 +79,7 @@ function SetButton(props) {
 
   let Color1 = '#FBFF47';
   let Color2 = '#E6F7FF'
-  if(probs.type === "pump"){
+  if(props.type === "pump"){
     Color1="#B3E0FF";
     Color2='#E6F7FF'
   }
