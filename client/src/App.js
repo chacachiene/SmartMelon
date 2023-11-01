@@ -5,7 +5,7 @@ import DashBoard from "pages/Dashboard"
 import LayOut from "component/Layout"
 
 import Login from "pages/Login"
-import SetUp from "pages/Setup"
+import SetUp from "pages/Control"
 import Visualize from "pages/Visualize"
 import Threshold from "pages/Threshold"
 
