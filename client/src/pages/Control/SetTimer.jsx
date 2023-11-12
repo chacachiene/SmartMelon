@@ -101,10 +101,10 @@ const SetTimer = (props) => {
       justifyContent: "center",
       backgroundColor: "#f5f5f5",
       borderRadius: "10px",
-      padding: "20px",
+      padding: "5px",
       boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-      width: "50%", // Change the width to your desired size
-      height: "25%",
+      width: "300ox", // Change the width to your desired size
+      height: "50%",
       background: `linear-gradient(to bottom, ${Color1}, ${Color2})`,
     }}
   > 
