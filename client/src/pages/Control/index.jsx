@@ -67,7 +67,7 @@ function Control() {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Stack spacing={2}>
           <h1>Set Up Page</h1>
-          <Stack spacing={10}>
+          <Stack spacing={4}>
             <Stack direction="row" spacing={20}>
               <SetTimer type="pump" value="0" />
 

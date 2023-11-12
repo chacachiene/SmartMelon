@@ -10,6 +10,7 @@ import AlarmRoundedIcon from "@mui/icons-material/AlarmRounded"
 import FormikFieldDateTimePicker from "component/FormikFieldDateTimePicker/FormikFieldDateTimePicker"
 import { publish } from "database/mqtt/mqtt"
 import { style } from "@mui/system"
+import { Box } from "@mui/system"
 
 const initialValues = {
   from: "2023-10-30T14:00:000.00",
@@ -83,16 +84,39 @@ const SetTimer = (props) => {
       alert("Time range set")
     }
   }
+
+  let Color1 = "#FDFFA0"
+  let Color2 = "#E6F7FF"
+  if (props.type === "pump") {
+    Color1 = "#B3E0FF"
+    Color2 = "#E6F7FF"
+  }
+
   return (
+    <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "#f5f5f5",
+      borderRadius: "10px",
+      padding: "20px",
+      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+      width: "50%", // Change the width to your desired size
+      height: "25%",
+      background: `linear-gradient(to bottom, ${Color1}, ${Color2})`,
+    }}
+  > 
     <Formik onSubmit={handleSubmit} initialValues={initialValues}>
       {({ values, errors }) => (
         <Form style={{ margin: 16, width: "500px" }}>
           <Grid container spacing={0}>
             <Grid container spacing={0}>
               <Grid item xs={12}>
-                <Typography variant="subtitle1" gutterBottom style={mb}>
+                <Typography variant="subtitle1" gutterBottom style={{ marginBottom: 'your-value', fontSize: 20, fontWeight: 'bold' }}>
                   Setting time for {props.type}
-                </Typography>
+                </Typography> 
               </Grid>
             </Grid>
 
@@ -134,18 +158,21 @@ const SetTimer = (props) => {
             <AlarmRoundedIcon style={{ width: "50px", height: "50px" }} />
           </div>
 
-          <Slider
-            name="level"
-            aria-label="Restricted values"
-            defaultValue={0}
-            value={sliderValue}
-            onChange={handleSliderChange}
-            valueLabelFormat={valueLabelFormat}
-            getAriaValueText={valuetext}
-            step={25}
-            valueLabelDisplay="auto"
-            marks={marks}
-          />
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Slider
+              name="level"
+              aria-label="Restricted values"
+              defaultValue={0}
+              value={sliderValue}
+              onChange={handleSliderChange}
+              valueLabelFormat={valueLabelFormat}
+              getAriaValueText={valuetext}
+              step={25}
+              valueLabelDisplay="auto"
+              marks={marks}
+              style={{ width: '85%' }} // Adjust the width as needed
+            />
+          </div>
 
           <Stack Stack spacing={2} direction="row">
             <Button type='reset' variant="contained" >
@@ -159,6 +186,7 @@ const SetTimer = (props) => {
         </Form>
       )}
     </Formik>
+    </Box>
   )
 }
 
