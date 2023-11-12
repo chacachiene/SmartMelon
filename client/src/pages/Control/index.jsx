@@ -66,9 +66,10 @@ function Control() {
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Box style={{ padding: '30px' }}>
         <Stack spacing={2}>
           <h1>Set Up Page</h1>
-          <Box style={{ padding: '30px' }}>
+          
             <Stack direction="row" spacing={6}>
               <Stack spacing={6}>
                 <SetTimer type="pump" value="0" />
@@ -82,8 +83,9 @@ function Control() {
                   <ScheduleDataTable />
                 </Stack>            
             </Stack>
-          </Box>
+          
         </Stack>
+      </Box>
         
       </LocalizationProvider>
     </div>
