@@ -39,14 +39,18 @@ function Control() {
 
   useEffect(() => {
     const fetchData = async () => {
+      try{
       let pumpStatus = await getLastValue("pump-button")
       const pumpVar = Number(pumpStatus.split(":")[0]);
-      console.log("pumpVar: " + pumpVar)
+      
       dispatch(setPumpButton(pumpVar))
 
       let lightStatus = await getLastValue("led-button")
       const lightVar = Number(lightStatus.split(":")[0]);
-      dispatch(setLightButton(parseInt(lightVar)))
+      dispatch(setLightButton(parseInt(lightVar)))}
+      catch(err){
+        console.log(err)
+      }
     }
     fetchData()
   }, [])
@@ -56,7 +60,7 @@ function Control() {
       
       publish("pump-button", value.toString()+':1')
     } else if (type === "light") {
-      dispatch(setLightButton(parseInt(value)))
+      publish("led-button", value.toString()+':1')
       
     }
   }
