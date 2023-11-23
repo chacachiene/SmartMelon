@@ -11,7 +11,7 @@ export const register = async (req, res) => {
       username,
       password,
       confirmPassword,
-      picturePath,
+      picture,
       role,
       location,
     } = req.body
@@ -31,7 +31,7 @@ export const register = async (req, res) => {
       firstName,
       lastName,
       email,
-      picturePath,
+      picture,
       username,
       password: hashedPassword,
     })
