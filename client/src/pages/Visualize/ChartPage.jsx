@@ -5,6 +5,8 @@ import { Box, Button, Container, Grid, Paper, Stack, Typography } from "@mui/mat
 import { LineChart } from "@mui/x-charts"
 import styled from "@emotion/styled"
 import { Cached } from "@mui/icons-material"
+
+
 const ChartPage = ({ Namepage }) => {
   return (
     <>

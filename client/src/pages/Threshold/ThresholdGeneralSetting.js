@@ -17,13 +17,9 @@ const ThresholdGeneralSetting = () => {
         setSelectedSquare(square);
         setSensor(nameSensor)
     };
-
     const handlerSubmit = () => {
         console.log(upper, lower)
     }
-
-
-
     return (
         <Container>
             <Typography variant="h3" sx={{ marginBottom: "30px", marginTop: "10px", width: "100%" }}>
