@@ -46,22 +46,22 @@ function NavBar() {
   const name = user.firstName + " " + user.lastName
 
   return (
-    // <FlexBetween padding="1rem 6%" backgroundColor={alt}>
-    //   <Typography
-    //     fontWeight="bold"
-    //     fontSize="clamp(1.5rem, 2vw, 2rem)"
-    //     color="primary"
-    //     paddingLeft="2rem"
-    //     onclick={() => navigate("/dashboard")}
-    //     sx={{
-    //       "&:hover": {
-    //         color: neutrallight,
-    //         cursor: "pointer",
-    //       },
-    //     }}
-    //   >
-    //     SmartMelon
-    //   </Typography>
+    <FlexBetween padding="1rem 6%" backgroundColor={alt}>
+      <Typography
+        fontWeight="bold"
+        fontSize="clamp(1.5rem, 2vw, 2rem)"
+        color="primary"
+        paddingLeft="2rem"
+        onclick={() => navigate("/dashboard")}
+        sx={{
+          "&:hover": {
+            color: neutrallight,
+            cursor: "pointer",
+          },
+        }}
+      >
+        SmartMelon
+      </Typography>
 
       {isPc && (
         <FlexBetween gap="2rem">
