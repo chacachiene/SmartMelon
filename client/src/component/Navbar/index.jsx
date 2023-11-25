@@ -5,12 +5,14 @@ import {
   IconButton,
   InputBase,
   Select,
+  Menu,
   MenuItem,
   FormControl,
   useTheme,
   useMediaQuery,
   Typography,
   Icon,
+  Button,
 } from "@mui/material"
 import {
   Search,
@@ -18,17 +20,18 @@ import {
   DarkMode,
   LightMode,
   Notifications,
-  Menu,
   Help,
   Close,
 } from "@mui/icons-material"
+import Avatar from "@mui/material/Avatar"
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state"
 import { useDispatch, useSelector } from "react-redux"
 import { setMode, setLogout } from "state"
 import { useNavigate } from "react-router-dom"
 import FlexBetween from "component/FlexBetween"
 
 function NavBar() {
-  const [isPcMenu, setIsPcMenu] = useState(true)
+  
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector((state) => state.auth.user)
@@ -49,7 +52,7 @@ function NavBar() {
         fontSize="clamp(1.5rem, 2vw, 2rem)"
         color="primary"
         paddingLeft="2rem"
-        onClick={() => navigate("/dashboard")}
+        onclick={() => navigate("/dashboard")}
         sx={{
           "&:hover": {
             color: neutrallight,
@@ -60,7 +63,7 @@ function NavBar() {
         SmartMelon
       </Typography>
 
-      {isPc ? (
+      {isPc && (
         <FlexBetween gap="2rem">
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
@@ -71,59 +74,57 @@ function NavBar() {
           </IconButton>
           <Notifications sx={{ fontSize: "25px" }} />
           <Help sx={{ fontSize: "25px" }} />
-          <FormControl variant="standard" value={name}>
-            <Select value={name}>
-              <MenuItem value={name}>
-                <Typography>{name} </Typography>
-              </MenuItem>
-              <MenuItem onclick={() => dispatch(setLogout())}>
-                <Typography>Log Out </Typography>
-              </MenuItem>
-            </Select>
-          </FormControl>
+    
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <React.Fragment>
+                <FlexBetween display="flex" justifyContent="right">
+                  <Typography sx={{}} >{name}</Typography>
+                  <Button {...bindTrigger(popupState)}>
+                    <Avatar alt="Remy Sharp" src={`http://localhost:5000/assets/${user.picture}`} />
+                  </Button>
+                </FlexBetween>
+                <Menu {...bindMenu(popupState)}>
+                  {/* onClick={popupState.close} maybe use later */}
+                  <MenuItem onClick ={() => dispatch(setLogout())}>Log Out</MenuItem>
+                </Menu>
+              </React.Fragment>
+            )}
+          </PopupState>
         </FlexBetween>
-      ) : (
-        <IconButton onClick={() => setIsPcMenu(!isPcMenu)}>
-          <Menu />
-        </IconButton>
       )}
 
-      {isPcMenu && !isPc ? (
-        <Box>
-          <Box>
-            <IconButton onClick={() => setIsPcMenu(!isPcMenu)}>
-              <Close />
-            </IconButton>
-          </Box>
-
-          <FlexBetween
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            gap="3rem"
-          >
-            <IconButton onClick={() => dispatch(setMode())}>
-              {theme.palette.mode === "dark" ? (
-                <LightMode sx={{ color: "dark", fontSize: "25px" }} />
-              ) : (
-                <DarkMode sx={{ fontSize: "25px" }} />
-              )}
-            </IconButton>
-            <Notifications sx={{ fotSize: "25px" }} />
-            <Help sx={{ fontSize: "25px" }} />
-            <FormControl variant="standard" value={name}>
-              <Select value={name}>
-                <MenuItem value={name}>
-                  <Typography>{name} </Typography>
+      {!isPc ? (
+        <PopupState variant="popover" popupId="demo-popup-menu">
+          {(popupState) => (
+            <React.Fragment>
+              <FlexBetween display="flex" justifyContent="right">
+                <Typography sx={{}} >{name}</Typography>
+                <Button {...bindTrigger(popupState)}>
+                  <Avatar alt="Remy Sharp" src={`http://localhost:5000/assets/${user.picture}`} />
+                </Button>
+              </FlexBetween>
+              <Menu {...bindMenu(popupState)}>
+                {/* onClick={popupState.close} maybe use later */}
+                <MenuItem>
+                  <IconButton onClick={() => dispatch(setMode())}>
+                    {theme.palette.mode === "dark" ? (
+                      <LightMode sx={{ color: "dark", fontSize: "25px" }} />
+                    ) : (
+                      <DarkMode sx={{ fontSize: "25px" }} />
+                    )}
+                  </IconButton>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
-                  <Typography>Log Out </Typography>
+                <MenuItem onClick={popupState.close}>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Notifications sx={{ fontSize: "25px", ml:'9px' }} />
+                </Box>
                 </MenuItem>
-              </Select>
-            </FormControl>
-          </FlexBetween>
-        </Box>
+                <MenuItem onClick ={() => dispatch(setLogout())}>Logout</MenuItem>
+              </Menu>
+            </React.Fragment>
+          )}
+        </PopupState>
       ) : null}
     </FlexBetween>
   )
