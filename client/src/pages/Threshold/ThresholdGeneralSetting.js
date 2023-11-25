@@ -3,37 +3,16 @@ import { useLocation, Outlet } from "react-router-dom"
 import ToggleButton from "@mui/material/ToggleButton"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 
-import {
-  Container,
-  Typography,
-  Paper,
-  Grid,
-  styled,
-  Box,
-  Button,
-  IconButton,
-  Input,
-  TextField,
-  FormControl,
-  OutlinedInput,
-  InputAdornment,
-  FormHelperText,
-} from "@mui/material"
-import {
-  Remove,
-  Add,
-  WaterDropOutlined,
-  TungstenOutlined,
-  DeviceThermostatOutlined,
-  Adjust,
-  TextFields,
-} from "@mui/icons-material"
+import { Container, Typography, Paper, Grid, styled, Box, Button } from "@mui/material"
+import { WaterDropOutlined, TungstenOutlined, DeviceThermostatOutlined } from "@mui/icons-material"
 
+import QuantityInput from "component/ThresholdInput"
 const ThresholdGeneralSetting = () => {
   const [sensor, setSensor] = useState("Soll Moisure Sensor")
   const [selectedSquare, setSelectedSquare] = useState(1)
   const [upper, setUpper] = useState(0)
   const [lower, setLower] = useState(0)
+
   const handleSquareClick = (square, nameSensor) => {
     setSelectedSquare(square)
     setSensor(nameSensor)
@@ -41,34 +20,16 @@ const ThresholdGeneralSetting = () => {
 
   const handlerSubmit = () => {
     console.log(upper, lower)
-  }
-  const styles = {
-    centeredInput: {
-      textAlign: "center",
-      width: "100px",
-    },
-  }
-  // const handleInputChange = (event) => {
-  //   const inputValue = event.target.value
-  //   const numericValue = parseInt(inputValue) // Chuyển đổi giá trị thành số
-  //   console.log(lower, numericValue)
-  //   setLower(numericValue)
-  // }
-
-  const [value, setValue] = useState(0)
-
-  const decreaseValue = () => {
-    setValue(value - 1)
+    console.log(selectedSquare)
   }
 
-  const increaseValue = () => {
-    setValue(value + 1)
+  const handleClickUpper = (v) => {
+    setUpper(v)
+  }
+  const handleClickLower = (v) => {
+    setLower(v)
   }
 
-  const handleInputChange = (event) => {
-    const newValue = parseInt(event.target.value)
-    setValue(newValue)
-  }
   return (
     <Container>
       <Typography variant="h3" sx={{ marginBottom: "30px", marginTop: "10px", width: "100%" }}>
@@ -162,35 +123,9 @@ const ThresholdGeneralSetting = () => {
                 <Typography fontWeight={"bold"}>Uper Threshhold: </Typography>
               </Grid>
               <Grid item xs={8} xl={8} xm={8}>
-                <div style={{ width: "100%" }}>
-                  <ToggleButtonGroup color="primary" exclusive aria-label="Platform">
-                    <ToggleButton
-                      value="web"
-                      onClick={() => {
-                        if (upper > 0) setUpper(upper - 1)
-                      }}
-                    >
-                      <Remove />
-                    </ToggleButton>
-
-                    <OutlinedInput
-                      id="outlined-adornment-weight-1"
-                      endAdornment={<InputAdornment position="end">kg</InputAdornment>}
-                      aria-describedby="outlined-weight-helper-text"
-                      inputProps={{
-                        "aria-label": "weight",
-                        style: styles.centeredInput,
-                      }}
-                      style={{ borderRadius: "0px" }}
-                      defaultValue={upper}
-                      onChange={(value) => setUpper(value)}
-                    />
-
-                    <ToggleButton value="ios " onClick={() => setUpper(upper + 1)}>
-                      <Add />
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                </div>
+                <Grid container spacing={2} alignItems="center">
+                  <QuantityInput prop={handleClickUpper} />
+                </Grid>
               </Grid>
               <Grid
                 item
@@ -203,15 +138,7 @@ const ThresholdGeneralSetting = () => {
               </Grid>
               <Grid item xs={8} xl={8} xm={8}>
                 <Grid container spacing={2} alignItems="center">
-                  <Grid item>
-                    <Button onClick={decreaseValue}>-</Button>
-                  </Grid>
-                  <Grid item>
-                    <TextField type="number" value={value} onChange={handleInputChange} />
-                  </Grid>
-                  <Grid item>
-                    <Button onClick={increaseValue}>+</Button>
-                  </Grid>
+                  <QuantityInput prop={handleClickLower} />
                 </Grid>
               </Grid>
 
