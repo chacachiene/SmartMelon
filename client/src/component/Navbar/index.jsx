@@ -48,8 +48,8 @@ function NavBar() {
         fontWeight="bold"
         fontSize="clamp(1.5rem, 2vw, 2rem)"
         color="primary"
-        paddingLeft = "2rem"
-        onclick={() => navigate("/dashboard")}
+        paddingLeft="2rem"
+        onClick={() => navigate("/dashboard")}
         sx={{
           "&:hover": {
             color: neutrallight,
@@ -113,14 +113,14 @@ function NavBar() {
             <Notifications sx={{ fotSize: "25px" }} />
             <Help sx={{ fontSize: "25px" }} />
             <FormControl variant="standard" value={name}>
-                <Select value={name}>
-                    <MenuItem value={name}>
-                        <Typography>{name} </Typography>
-                    </MenuItem>
-                    <MenuItem onClick={() => dispatch(setLogout())}>
-                        <Typography>Log Out </Typography>
-                    </MenuItem>
-                </Select>
+              <Select value={name}>
+                <MenuItem value={name}>
+                  <Typography>{name} </Typography>
+                </MenuItem>
+                <MenuItem onClick={() => dispatch(setLogout())}>
+                  <Typography>Log Out </Typography>
+                </MenuItem>
+              </Select>
             </FormControl>
           </FlexBetween>
         </Box>
