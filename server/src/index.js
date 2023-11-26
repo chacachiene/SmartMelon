@@ -46,8 +46,8 @@ const upload = multer({ storage })
 
 app.post('/auth/register', upload.single('picture'), register)
 
- app.use('/auth', authRoutes)
- app.use('/user', userRoutes)
+app.use('/auth', authRoutes)
+app.use('/user', userRoutes)
 
 const PORT = process.env.PORT || 6001
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true
