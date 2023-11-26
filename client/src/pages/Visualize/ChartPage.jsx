@@ -1,13 +1,90 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useState } from "react"
 import { BarChart } from "@mui/x-charts/BarChart"
 import { Helmet } from "react-helmet"
-import { Box, Button, Container, Grid, Paper, Stack, Typography } from "@mui/material"
+import { Box, Button, Container, Grid, Paper, Stack, Typography, TextField } from "@mui/material"
 import { LineChart } from "@mui/x-charts"
 import styled from "@emotion/styled"
 import { Cached } from "@mui/icons-material"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
+import { DatePicker } from "@mui/x-date-pickers"
+import dayjs from "dayjs"
+const data = [
+  {
+    value: "60",
+    created_at: "2023-10-29T00:07:15Z",
+  },
+  {
+    value: "40",
+    created_at: "2023-10-29T15:07:15Z",
+  },
 
+  {
+    value: "50",
+    created_at: "2023-10-29T14:07:15Z",
+  },
 
+  {
+    value: "20",
+    created_at: "2023-10-29T16:07:15Z",
+  },
+
+  {
+    value: "60",
+    created_at: "2023-10-29T04:07:15Z",
+  },
+]
 const ChartPage = ({ Namepage }) => {
+  const [dataSeries, setDataSeries] = useState(Array.from({ length: 24 }, (_, index) => null))
+  const [dataSeries1, setDataSeries1] = useState(Array.from({ length: 24 }, (_, index) => null))
+  const dataAxis = Array.from({ length: 24 }, (_, index) => index)
+  const [selectedDate, setSelectedDate] = useState(dayjs("2023-10-29T15:07:15Z"))
+
+  // useEffect(() => {
+  //   if (selectedDate) {
+  //     const selectedDay = dayjs(selectedDate).format("DD/MM/YYYY")
+
+  //     setDataSeries1(Array.from({ length: 24 }, (_, index) => null))
+  //     data.forEach((item) => {
+  //       const date = dayjs(item.created_at).format("DD/MM/YYYY")
+  //       if (date === selectedDay) {
+  //         const hour = dayjs(item.created_at).format("H")
+  //         dataSeries1[hour - 7] = Number(item.value)
+  //       }
+  //     })
+  //   }
+  // }, [selectedDate])
+  useEffect(() => {
+    if (selectedDate) {
+      const selectedDay = dayjs(selectedDate).format("DD/MM/YYYY")
+
+      setDataSeries1(Array.from({ length: 24 }, (_, index) => null))
+      data.forEach((item) => {
+        const date = dayjs(item.created_at).format("DD/MM/YYYY")
+        if (date === selectedDay) {
+          const hour = dayjs(item.created_at).format("H")
+          dataSeries1[hour - 7] = Number(item.value)
+        }
+      })
+
+      // Gán dataSeries1 vào một mảng tạm thời
+      const tempDataSeries = [...dataSeries1]
+      setDataSeries(tempDataSeries)
+    }
+  }, [selectedDate])
+
+  // ...
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date)
+  }
+  // useEffect(() => {
+  //   setDataSeries(dataSeries1)
+  // }, [dataSeries1])
+  // useEffect(() => {
+  //   console.log("dataseries12312312", dataSeries)
+  // }, [dataSeries])
   return (
     <>
       <Container>
@@ -18,53 +95,42 @@ const ChartPage = ({ Namepage }) => {
         <Paper>
           <Grid container>
             <Grid item xs={10}>
-              {Namepage === "Temperature Status" && (
-                <LineChart
-                  series={[
-                    { curve: "linear", data: [0, 5, 2, 6, 3, 9.3] },
-                    { curve: "linear", data: [6, 3, 7, 9.5, 4, 2] },
-                  ]}
-                  style={{ width: "100%" }}
-                  height={300}
-                />
-              )}
-              {Namepage === "Lighting Status" && (
-                <LineChart
-                  xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                  series={[
-                    {
-                      data: [2, 5.5, 2, 8.5, 1.5, 5],
-                      area: true,
-                    },
-                  ]}
-                  style={{ width: "100%" }}
-                  height={300}
-                />
-              )}
-
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                marginBottom={"10px"}
-              >
-                <Item>
-                  <h3>Status: Normal</h3>
-                </Item>
-                <Item
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    spacing: "5px",
-                  }}
-                >
-                  <h3>Current: 80%</h3>
-                  <Button>
-                    <Cached fontSize="large" />
-                  </Button>
-                </Item>
-              </Stack>
+              <LineChart
+                xAxis={[
+                  {
+                    data: dataAxis,
+                  },
+                ]}
+                series={[
+                  {
+                    data: dataSeries,
+                    area: true,
+                  },
+                ]}
+                style={{ width: "100%" }}
+                height={300}
+              />
+              <Grid container>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={3}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker value={selectedDate} onChange={handleDateChange} />
+                  </LocalizationProvider>
+                </Grid>
+                <Grid item xs={4}>
+                  <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <h3>Status: Normal</h3>
+                  </div>
+                </Grid>
+                <Grid item xs={4}>
+                  <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <h3>Current: 80%</h3>
+                    <Button>
+                      <Cached fontSize="large" />
+                    </Button>
+                  </div>
+                </Grid>
+              </Grid>
             </Grid>
 
             <Grid item xs={2}>

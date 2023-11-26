@@ -124,7 +124,9 @@ const ThresholdGeneralSetting = () => {
               </Grid>
               <Grid item xs={8} xl={8} xm={8}>
                 <Grid container spacing={2} alignItems="center">
-                  <QuantityInput prop={handleClickUpper} />
+                  <div style={{ width: "100%" }}>
+                    <QuantityInput prop={handleClickUpper} />
+                  </div>
                 </Grid>
               </Grid>
               <Grid
@@ -138,7 +140,9 @@ const ThresholdGeneralSetting = () => {
               </Grid>
               <Grid item xs={8} xl={8} xm={8}>
                 <Grid container spacing={2} alignItems="center">
-                  <QuantityInput prop={handleClickLower} />
+                  <div style={{ width: "100%" }}>
+                    <QuantityInput prop={handleClickLower} />
+                  </div>
                 </Grid>
               </Grid>
 
