@@ -21,6 +21,7 @@ function DashBoard() {
 
   // listen when the sensor feed change value
   client.on("message", (topic, message, packet) => {
+    console.log("aaaaa")
     const lastSlashIndex = topic.toString().lastIndexOf("/")
     const name = topic.toString().substring(lastSlashIndex + 1)
     console.log("name is: ", name)
