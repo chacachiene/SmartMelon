@@ -9,6 +9,7 @@ import SetUp from "pages/Setup/ThresholdGeneralSetting"
 import Control from "pages/Control"
 import Visualize from "pages/Visualize"
 import Threshold from "pages/Threshold"
+import History from "pages/History/History"
 
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
@@ -36,6 +37,7 @@ function App() {
           <Route element={<LayOut />}>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<DashBoard />} />
+            <Route path="/history" element={<History />} />
             <Route path="/control" element={<Control />} />
             <Route path="/setup" element={<ThresholdGeneralSetting />} />
             <Route path="/energy-management" element={<EnergyManagement />} >
