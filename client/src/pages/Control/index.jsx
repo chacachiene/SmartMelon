@@ -12,6 +12,7 @@ import sensorAPI from "database/http/sensorAPI"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { Stack } from "@mui/material"
+import ScheduleDataTable from "./ScheduleDataTable"
 
 //get the value of the light and pump
 import { getLastValue } from "database/http/getAdaData"
@@ -63,20 +64,27 @@ function Control() {
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Box style={{ padding: '30px' }}>
         <Stack spacing={2}>
           <h1>Set Up Page</h1>
-          <Stack spacing={10}>
-            <Stack direction="row" spacing={20}>
-              <SetTimer type="pump" value="0" />
-
-              <Stack direction="row" spacing={6}>
-                <SetButton type="pump" value={button.pumpButton} afunc={submitStatus} />
-                <SetButton type="light" value={button.lightButton} afunc={submitStatus} />
+          
+            <Stack direction="row" spacing={6}>
+              <Stack spacing={6}>
+                <SetTimer type="pump" value="0" />
+                <SetTimer type="light" value="0" />         
               </Stack>
+                <Stack spacing={10}>
+                  <Stack direction="row" spacing={6}>
+                    <SetButton type="pump" value={button.pumpButton} afunc={submitStatus} />
+                    <SetButton type="light" value={button.lightButton} afunc={submitStatus} />
+                  </Stack>
+                  <ScheduleDataTable />
+                </Stack>            
             </Stack>
-            <SetTimer type="light" value="0" />
-          </Stack>
+          
         </Stack>
+      </Box>
+        
       </LocalizationProvider>
     </div>
   )
