@@ -9,6 +9,7 @@ import SetUp from "pages/Threshold/ThresholdGeneralSetting"
 import Control from "pages/Control"
 import Visualize from "pages/Visualize"
 import Threshold from "pages/Threshold"
+import History from "pages/History/History"
 
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
@@ -128,16 +129,26 @@ function App() {
           <CssBaseline />
 
           {user ? (
-            <Routes>
-              <Route element={<LayOut />}>
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/dashboard" element={<DashBoard />} />
-                <Route path="/control" element={<Control />} />
-                <Route path="/setup" element={<ThresholdGeneralSetting />} />
-                <Route path="/visualize" element={<Visualize />} />
+        <Routes>
+          <Route element={<LayOut />}>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<DashBoard />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/control" element={<Control />} />
+            <Route path="/setup" element={<ThresholdGeneralSetting />} />
+            <Route path="/energy-management" element={<EnergyManagement />} >
+                <Route path="/energy-management/threshold-general-setting" element={<ThresholdGeneralSetting />} />
+                <Route path="/energy-management/temperature-status" element={<ChartPage Namepage={"Temperature Status"} />} />
+                <Route path="/energy-management/lighting-status" element={<ChartPage Namepage={"Lighting Status"} />} />
+                <Route path="/energy-management/humidity-status" element={<ChartPage />} />
+                <Route path="/energy-management/soil-moisture-status" element={<ChartPage />} />
+                <Route path="/energy-management/threshold-general-setting" element={<ChartPage />} />
               </Route>
-            </Routes>
-          ) : (
+            <Route path="/visualize" element={<Visualize />} />
+            
+          </Route>
+        </Routes>
+        ) : (
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<Login />} />
