@@ -2,16 +2,31 @@ import { useState } from "react"
 import { useLocation, Outlet } from "react-router-dom"
 import ToggleButton from "@mui/material/ToggleButton"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
-
 import { Container, Typography, Paper, Grid, styled, Box, Button } from "@mui/material"
 import { WaterDropOutlined, TungstenOutlined, DeviceThermostatOutlined } from "@mui/icons-material"
-
 import QuantityInput from "component/ThresholdInput"
+
+import { useSelector, useDispatch } from "react-redux"
+
+
 const ThresholdGeneralSetting = () => {
   const [sensor, setSensor] = useState("Soll Moisure Sensor")
   const [selectedSquare, setSelectedSquare] = useState(1)
   const [upper, setUpper] = useState(0)
   const [lower, setLower] = useState(0)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const handleSquareClick = (square, nameSensor) => {
     setSelectedSquare(square)
