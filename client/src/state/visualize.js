@@ -8,7 +8,7 @@ const initialState = {
 }
 
 export const visualizeReducer = createSlice({
-  name: "button",
+  name: "visualize",
   initialState,
   reducers: {
     setLightVisual: (state, action) => {

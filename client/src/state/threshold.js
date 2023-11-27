@@ -8,7 +8,7 @@ const initialState = {
 }
 
 export const thresHoldReducer = createSlice({
-  name: "button",
+  name: "threshold",
   initialState,
   reducers: {
     setLightThreshold: (state, action) => {

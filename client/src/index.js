@@ -5,6 +5,7 @@ import authReducer from "./state"
 import buttonReducer from "state/button_time"
 import sensorReducer from "state/sensor"
 import thresHoldReducer from "state/threshold"
+import visualizeReducer  from "state/visualize"
 import notiReducer from "state/noti"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   sensor: sensorReducer,
   threshold: thresHoldReducer,
   noti: notiReducer,
+  visualize: visualizeReducer,
 })
 
 const store = configureStore({

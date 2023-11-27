@@ -10,32 +10,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { DatePicker } from "@mui/x-date-pickers"
 import dayjs from "dayjs"
-const data = [
-  {
-    value: "60",
-    created_at: "2023-10-29T00:07:15Z",
-  },
-  {
-    value: "40",
-    created_at: "2023-10-29T15:07:15Z",
-  },
 
-  {
-    value: "50",
-    created_at: "2023-10-29T14:07:15Z",
-  },
-
-  {
-    value: "20",
-    created_at: "2023-10-29T16:07:15Z",
-  },
-
-  {
-    value: "60",
-    created_at: "2023-10-29T04:07:15Z",
-  },
-]
-const ChartPage = ({ Namepage }) => {
+const ChartPage = ({ Namepage, data }) => {
   const [dataSeries, setDataSeries] = useState(Array.from({ length: 24 }, (_, index) => null))
   const [dataSeries1, setDataSeries1] = useState(Array.from({ length: 24 }, (_, index) => null))
   const dataAxis = Array.from({ length: 24 }, (_, index) => index)
@@ -57,8 +33,6 @@ const ChartPage = ({ Namepage }) => {
   // }, [selectedDate])
   useEffect(() => {
     
-
-
 
     if (selectedDate) {
       const selectedDay = dayjs(selectedDate).format("DD/MM/YYYY")

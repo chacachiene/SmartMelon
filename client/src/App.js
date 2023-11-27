@@ -112,18 +112,41 @@ function App() {
     const fetchAllDataSensor = async () => {
       try {
         const temp_humi = await getAll("temp-humi")
-        // const [temp, humi] = temp_humi.toString().split(":")
         const moisData = await getAll("soil-moisture")
         const lightData = await getAll("light-sensor")
+       
+        const temp = [];
+        const humi = [];
+        const light = [];
+        const mois = [];
+
+        temp_humi.forEach((item, index) => {
+
+          const [value1, value2] = item.value.split(':');
+
+          temp.push({ created_at: item.created_at, value: parseFloat(value1) });
+          humi.push({ created_at: item.created_at, value: parseFloat(value2) });
+        });
+        lightData.forEach((item, index) => {
+          light.push({ created_at: item.created_at, value: parseFloat(item.value) });
+        });
+        moisData.forEach((item, index) => {
+        
+          mois.push({ created_at: item.created_at, value: parseFloat(item.value) });
+        });
+
+
 
         // dispatch(setTempSensor(parseFloat(temp).toFixed(2)))
         // dispatch(setHumiSensor(parseFloat(humi).toFixed(2)))
-        dispatch(setLightVisual(moisData))
-        dispatch(setMoisVisual(lightData))
-        console.log("all light", lightData )
-        console.log("all mois", moisData )
-        console.log("all temp_humi", temp_humi )
-
+        dispatch(setLightVisual(mois))
+        dispatch(setMoisVisual(light))
+        dispatch(setTempVisual(temp))
+        dispatch(setHumiVisual(humi))
+        console.log("all light", light)
+        console.log("all mois", mois )
+        console.log("temp ", temp )
+        console.log("humi ", humi )
       } catch (err) {
         console.log(err)
       }
@@ -148,11 +171,11 @@ function App() {
             <Route path="/control" element={<Control />} />
             <Route path="/setup" element={<ThresholdGeneral />} />
             <Route path="/visualize" element={<Visualize />} />
-                <Route path="/visualize/threshold-general-setting" element={<ThresholdGeneral />} />
-                <Route path="/visualize/temperature-status" element={<ChartPage Namepage={"Temperature Status"} />} />
-                <Route path="/visualize/lighting-status" element={<ChartPage Namepage={"Lighting Status"} />} />
-                <Route path="/visualize/humidity-status" element={<ChartPage />} />
-                <Route path="/visualize/soil-moisture-status" element={<ChartPage />} />
+                
+                {/* <Route path="/visualize/temperature" element={<Visualize Namepage={"Temperature Status"} />} />
+                <Route path="/visualize/light" element={<Visualize Namepage={"Lighting Status"} />} />
+                <Route path="/visualize/humidity-status" element={<Visualize />} />
+                <Route path="/visualize/soil-moisture-status" element={<Visualize />} /> */}
             </Route>
         </Routes>
         ) : (

@@ -2,74 +2,20 @@ import { Box, Grid, Paper, Typography, Button, Container } from "@mui/material"
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 
-import { setHumiSensor, setLightSensor, setTempSensor, setMoisSensor } from "state/sensor"
-import client from "database/mqtt/mqtt.js"
-import { useEffect } from "react"
-import { getLastValue } from "database/http/getAdaData"
 import { useNavigate } from "react-router-dom"
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import WbIncandescentIcon from '@mui/icons-material/WbIncandescent';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
 
 function DashBoard() {
-  const dispatch = useDispatch()
+
   const navigate = useNavigate()
   const temp = useSelector((state) => state.sensor.temp)
   const humi = useSelector((state) => state.sensor.humi)
   const light = useSelector((state) => state.sensor.light)
   const mois = useSelector((state) => state.sensor.mois)
 
-  // listen when the sensor feed change value
-  client.on("message", (topic, message, packet) => {
-    console.log("aaaaa")
-    const lastSlashIndex = topic.toString().lastIndexOf("/")
-    const name = topic.toString().substring(lastSlashIndex + 1)
-    console.log("name is: ", name)
-    if (name === "light-sensor") {
-      dispatch(setLightSensor(parseInt(message)))
-    }
-    if (name === "soil-moisture") {
-      console.log("mois is: ", parseInt(message))
-      dispatch(setMoisSensor(parseInt(message)))
-    }
-    if (name === "temp-humi") {
-      const [temp, humi] = message.toString().split(":")
-      dispatch(setTempSensor(parseFloat(temp)))
-      dispatch(setHumiSensor(parseFloat(humi)))
-    }
-  })
 
-  // get the last value of the sensor feed when the page is loaded
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch data for "temp-humi"
-        const temp_humi = await getLastValue("temp-humi");
-        if (temp_humi) {
-          const [temp, humi] = temp_humi.toString().split(":");
-          dispatch(setTempSensor(parseFloat(temp)));
-          dispatch(setHumiSensor(parseFloat(humi)));
-        }
-  
-        // Fetch data for "soil-moisture"
-        const moisData = await getLastValue("soil-moisture");
-        if (moisData) {
-          console.log("mois is: ", parseInt(moisData));
-          dispatch(setMoisSensor(parseInt(moisData)));
-        }
-  
-        // Fetch data for "light-sensor"
-        const lightData = await getLastValue("light-sensor");
-        if (lightData) {
-          dispatch(setLightSensor(lightData));
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-  
-    fetchData();
-  }, []);
 
   return (
 <>
