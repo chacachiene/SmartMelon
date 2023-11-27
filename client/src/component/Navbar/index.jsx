@@ -13,6 +13,7 @@ import {
   Typography,
   Icon,
   Button,
+  Badge,
 } from "@mui/material"
 import {
   Search,
@@ -29,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { setMode, setLogout } from "state"
 import { useNavigate } from "react-router-dom"
 import FlexBetween from "component/FlexBetween"
+import Noti from "pages/Noti"
 
 function NavBar() {
   
@@ -41,9 +43,10 @@ function NavBar() {
   const neutrallight = theme.palette.neutral.light
   const priLight = theme.palette.primary.light
   const alt = theme.palette.background.alt
-
-  //const name = `${user.firstName} ${user.lastName}`;
   const name = user.firstName + " " + user.lastName
+
+
+  
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -62,6 +65,7 @@ function NavBar() {
       >
         SmartMelon
       </Typography>
+        
 
       {isPc && (
         <FlexBetween gap="2rem">
@@ -72,7 +76,7 @@ function NavBar() {
               <DarkMode sx={{ fontSize: "25px" }} />
             )}
           </IconButton>
-          <Notifications sx={{ fontSize: "25px" }} />
+          <Noti />
           <Help sx={{ fontSize: "25px" }} />
     
           <PopupState variant="popover" popupId="demo-popup-menu">
@@ -116,9 +120,7 @@ function NavBar() {
                   </IconButton>
                 </MenuItem>
                 <MenuItem onClick={popupState.close}>
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Notifications sx={{ fontSize: "25px", ml:'9px' }} />
-                </Box>
+                <Noti />
                 </MenuItem>
                 <MenuItem onClick ={() => dispatch(setLogout())}>Logout</MenuItem>
               </Menu>

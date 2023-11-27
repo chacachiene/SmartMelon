@@ -58,8 +58,6 @@ const SetTimer = (props) => {
   }
 
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log(values)
-    console.log(sliderValue)
     let fromTime = values.from.slice(0, -7)
     let toTime = values.to.slice(0, -7)
 

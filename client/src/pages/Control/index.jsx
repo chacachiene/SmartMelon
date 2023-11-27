@@ -22,19 +22,15 @@ function Control() {
   const button = useSelector((state) => state.button)
 
 
-  client.on("message", (topic, message, packet) => {
-    const value = Number(message.toString().split(":")[0]);
-    console.log("received message " + topic + ": " + message)
-    const lastSlashIndex = topic.toString().lastIndexOf("/")
-    const name = topic.toString().substring(lastSlashIndex + 1)
-    console.log("name is: ", name)
-    console.log("value is: ", value)
-    if (name === "pump-button") {
-      dispatch(setPumpButton(parseInt(value)))
-    } else if (name === "led-button") {
-      dispatch(setLightButton(parseInt(value)))
-    }
-  })
+  // client.on("message", (topic, message, packet) => {
+  //   const value = Number(message.toString().split(":")[0]);
+  //   console.log("received message " + topic + ": " + message)
+  //   const lastSlashIndex = topic.toString().lastIndexOf("/")
+  //   const name = topic.toString().substring(lastSlashIndex + 1)
+  //   console.log("name is: ", name)
+  //   console.log("value is: ", value)
+    
+  // })
 
 
   useEffect(() => {
@@ -53,7 +49,6 @@ function Control() {
 
   const submitStatus = (type,value) => {
     if (type === "pump") {
-      
       publish("pump-button", value.toString()+':1')
     } else if (type === "light") {
       dispatch(setLightButton(parseInt(value)))

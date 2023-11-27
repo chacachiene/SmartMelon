@@ -15,7 +15,6 @@ const sensorAPI = {
         return axiosClient.get(url, options);
     },
     getLastValue(feed_id){
-        console.log("username: ",username)
         const url = `${username}/feeds/${feed_id}/data/last`;
         return axiosClient.get(url, options);
     }
