@@ -56,6 +56,10 @@ const ChartPage = ({ Namepage }) => {
   //   }
   // }, [selectedDate])
   useEffect(() => {
+    
+
+
+
     if (selectedDate) {
       const selectedDay = dayjs(selectedDate).format("DD/MM/YYYY")
 

@@ -32,11 +32,11 @@ const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
   );
 });
 
- const QuantityInput =({prop})=> {
+ const QuantityInput =({prop, valueDef})=> {
     console.log(typeof(prop))
     return (
       <>
-        <NumberInput handleValue={prop} aria-label="Quantity Input" min={1} max={99}  />
+        <NumberInput handleValue={prop} aria-label="Quantity Input" min={1} max={99} value={valueDef}   />
        
       </>
     )

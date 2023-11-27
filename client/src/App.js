@@ -17,7 +17,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material"
 import { createTheme } from "@mui/material/styles"
 import { themeSettings } from "theme"
 import "./index.css"
-import ThresholdGeneralSetting from "pages/Threshold/ThresholdGeneralSetting"
+import ThresholdGeneral from "pages/Threshold"
 import ChartPage from "pages/Visualize/ChartPage"
 
 import { setLightSensor, setMoisSensor, setTempSensor, setHumiSensor } from "state/sensor"
@@ -31,7 +31,7 @@ import {
   setTempThreshold,
   setMoisThreshold,
 } from "state/threshold"
-import { setLightNoti, setHumiNoti, setTempNoti, setMoisNoti, setSum } from "state/noti"
+import { setLightVisual, setHumiVisual,setMoisVisual,setTempVisual } from "state/visualize"
 
 import { getNum, getNoti } from "pages/Noti/getNoti"
 import { setPumpButton, setLightButton } from "state/button_time"
@@ -42,14 +42,6 @@ function App() {
 
   const dispatch = useDispatch()
 
-  const light = useSelector((state) => state.sensor.light)
-  const mois = useSelector((state) => state.sensor.mois)
-  const temp = useSelector((state) => state.sensor.temp)
-  const humi = useSelector((state) => state.sensor.humi)
-  const lightThreshold = useSelector((state) => state.threshold.light)
-  const moisThreshold = useSelector((state) => state.threshold.mois)
-  const tempThreshold = useSelector((state) => state.threshold.temp)
-  const humiThreshold = useSelector((state) => state.threshold.humi)
 
   client.on("message", (topic, message, packet) => {
     const lastSlashIndex = topic.toString().lastIndexOf("/")
@@ -117,7 +109,26 @@ function App() {
         console.log(err)
       }
     }
+    const fetchAllDataSensor = async () => {
+      try {
+        const temp_humi = await getAll("temp-humi")
+        // const [temp, humi] = temp_humi.toString().split(":")
+        const moisData = await getAll("soil-moisture")
+        const lightData = await getAll("light-sensor")
 
+        // dispatch(setTempSensor(parseFloat(temp).toFixed(2)))
+        // dispatch(setHumiSensor(parseFloat(humi).toFixed(2)))
+        dispatch(setLightVisual(moisData))
+        dispatch(setMoisVisual(lightData))
+        console.log("all light", lightData )
+        console.log("all mois", moisData )
+        console.log("all temp_humi", temp_humi )
+
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchAllDataSensor()
     fetchDataThreshold()
     fetchDataSensor()
   }, [])
@@ -135,9 +146,9 @@ function App() {
             <Route path="/dashboard" element={<DashBoard />} />
             <Route path="/history" element={<History />} />
             <Route path="/control" element={<Control />} />
-            <Route path="/setup" element={<ThresholdGeneralSetting />} />
+            <Route path="/setup" element={<ThresholdGeneral />} />
             <Route path="/visualize" element={<Visualize />} />
-                <Route path="/visualize/threshold-general-setting" element={<ThresholdGeneralSetting />} />
+                <Route path="/visualize/threshold-general-setting" element={<ThresholdGeneral />} />
                 <Route path="/visualize/temperature-status" element={<ChartPage Namepage={"Temperature Status"} />} />
                 <Route path="/visualize/lighting-status" element={<ChartPage Namepage={"Lighting Status"} />} />
                 <Route path="/visualize/humidity-status" element={<ChartPage />} />

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation, Outlet } from "react-router-dom"
 import ToggleButton from "@mui/material/ToggleButton"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
@@ -9,24 +9,15 @@ import QuantityInput from "component/ThresholdInput"
 import { useSelector, useDispatch } from "react-redux"
 
 
-const ThresholdGeneralSetting = () => {
+const ThresholdGeneralSetting = ({submitOnDb}) => {
   const [sensor, setSensor] = useState("Soll Moisure Sensor")
   const [selectedSquare, setSelectedSquare] = useState(1)
   const [upper, setUpper] = useState(0)
   const [lower, setLower] = useState(0)
-
-
-
-
-
-
-
-
-
-
-
-
-
+  const lightThreshold = useSelector((state) => state.threshold.light)
+  const moisThreshold = useSelector((state) => state.threshold.mois)
+  const tempThreshold = useSelector((state) => state.threshold.temp)
+  const humiThreshold = useSelector((state) => state.threshold.humi)
 
   const handleSquareClick = (square, nameSensor) => {
     setSelectedSquare(square)
@@ -36,6 +27,18 @@ const ThresholdGeneralSetting = () => {
   const handlerSubmit = () => {
     console.log(upper, lower)
     console.log(selectedSquare)
+    var value = upper.toString() + ':' + lower.toString()
+    if (selectedSquare === 1) {
+      submitOnDb("M" + value)
+    } else if (selectedSquare === 2) {
+      submitOnDb("L" + value)
+    }
+    else if (selectedSquare === 3) {
+      submitOnDb("H" + value)
+    }
+    else if (selectedSquare === 4) {
+      submitOnDb("T" + value)
+    }
   }
 
   const handleClickUpper = (v) => {
@@ -44,6 +47,23 @@ const ThresholdGeneralSetting = () => {
   const handleClickLower = (v) => {
     setLower(v)
   }
+  useEffect(() => {
+    if (selectedSquare === 1) {
+      setUpper(parseInt(moisThreshold[0]))
+      setLower(parseInt(moisThreshold[1]))
+    } else if (selectedSquare === 2) {
+      setUpper(parseInt(lightThreshold[0]))
+      setLower(parseInt(lightThreshold[1]))
+    }
+    else if (selectedSquare === 3) {
+      setUpper(parseInt(humiThreshold[0]))
+      setLower(parseInt(humiThreshold[1]))
+    }
+    else if (selectedSquare === 4) {
+      setUpper(parseInt(tempThreshold[0]))
+      setLower(parseInt(tempThreshold[1]))
+    }
+  } , [selectedSquare])
 
   return (
     <Container>
@@ -140,7 +160,7 @@ const ThresholdGeneralSetting = () => {
               <Grid item xs={8} xl={8} xm={8}>
                 <Grid container spacing={2} alignItems="center">
                   <div style={{ width: "100%" }}>
-                    <QuantityInput prop={handleClickUpper} />
+                    <QuantityInput prop={handleClickUpper} valueDef={upper}  />
                   </div>
                 </Grid>
               </Grid>
@@ -156,7 +176,7 @@ const ThresholdGeneralSetting = () => {
               <Grid item xs={8} xl={8} xm={8}>
                 <Grid container spacing={2} alignItems="center">
                   <div style={{ width: "100%" }}>
-                    <QuantityInput prop={handleClickLower} />
+                    <QuantityInput prop={handleClickLower} valueDef={lower}/>
                   </div>
                 </Grid>
               </Grid>
