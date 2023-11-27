@@ -1,6 +1,7 @@
 import { Box, Grid, Paper, Typography, Button, Container } from "@mui/material"
 import React from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+
 import { setHumiSensor, setLightSensor, setTempSensor, setMoisSensor } from "state/sensor"
 import client from "database/mqtt/mqtt.js"
 import { useEffect } from "react"

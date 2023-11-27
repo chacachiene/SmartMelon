@@ -136,17 +136,13 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/control" element={<Control />} />
             <Route path="/setup" element={<ThresholdGeneralSetting />} />
-            <Route path="/energy-management" element={<EnergyManagement />} >
-                <Route path="/energy-management/threshold-general-setting" element={<ThresholdGeneralSetting />} />
-                <Route path="/energy-management/temperature-status" element={<ChartPage Namepage={"Temperature Status"} />} />
-                <Route path="/energy-management/lighting-status" element={<ChartPage Namepage={"Lighting Status"} />} />
-                <Route path="/energy-management/humidity-status" element={<ChartPage />} />
-                <Route path="/energy-management/soil-moisture-status" element={<ChartPage />} />
-                <Route path="/energy-management/threshold-general-setting" element={<ChartPage />} />
-              </Route>
             <Route path="/visualize" element={<Visualize />} />
-            
-          </Route>
+                <Route path="/visualize/threshold-general-setting" element={<ThresholdGeneralSetting />} />
+                <Route path="/visualize/temperature-status" element={<ChartPage Namepage={"Temperature Status"} />} />
+                <Route path="/visualize/lighting-status" element={<ChartPage Namepage={"Lighting Status"} />} />
+                <Route path="/visualize/humidity-status" element={<ChartPage />} />
+                <Route path="/visualize/soil-moisture-status" element={<ChartPage />} />
+            </Route>
         </Routes>
         ) : (
             <Routes>
