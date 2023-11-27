@@ -12,6 +12,7 @@ import sensorAPI from "database/http/sensorAPI"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { Stack } from "@mui/material"
+import ScheduleDataTable from "./ScheduleDataTable"
 
 //get the value of the light and pump
 import { getLastValue } from "database/http/getAdaData"
@@ -22,63 +23,68 @@ function Control() {
   const button = useSelector((state) => state.button)
 
 
-  client.on("message", (topic, message, packet) => {
-    const value = Number(message.toString().split(":")[0]);
-    console.log("received message " + topic + ": " + message)
-    const lastSlashIndex = topic.toString().lastIndexOf("/")
-    const name = topic.toString().substring(lastSlashIndex + 1)
-    console.log("name is: ", name)
-    console.log("value is: ", value)
-    if (name === "pump-button") {
-      dispatch(setPumpButton(parseInt(value)))
-    } else if (name === "led-button") {
-      dispatch(setLightButton(parseInt(value)))
-    }
-  })
+  // client.on("message", (topic, message, packet) => {
+  //   const value = Number(message.toString().split(":")[0]);
+  //   console.log("received message " + topic + ": " + message)
+  //   const lastSlashIndex = topic.toString().lastIndexOf("/")
+  //   const name = topic.toString().substring(lastSlashIndex + 1)
+  //   console.log("name is: ", name)
+  //   console.log("value is: ", value)
+    
+  // })
 
 
   useEffect(() => {
     const fetchData = async () => {
+      try{
       let pumpStatus = await getLastValue("pump-button")
       const pumpVar = Number(pumpStatus.split(":")[0]);
-      console.log("pumpVar: " + pumpVar)
+      
       dispatch(setPumpButton(pumpVar))
 
       let lightStatus = await getLastValue("led-button")
       const lightVar = Number(lightStatus.split(":")[0]);
-      dispatch(setLightButton(parseInt(lightVar)))
+      dispatch(setLightButton(parseInt(lightVar)))}
+      catch(err){
+        console.log(err)
+      }
     }
     fetchData()
   }, [])
 
   const submitStatus = (type,value) => {
     if (type === "pump") {
-      
       publish("pump-button", value.toString()+':1')
     } else if (type === "light") {
-      dispatch(setLightButton(parseInt(value)))
+      publish("led-button", value.toString()+':1')
       
     }
   }
 
-
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Box style={{ padding: '30px' }}>
         <Stack spacing={2}>
           <h1>Set Up Page</h1>
-          <Stack spacing={10}>
-            <Stack direction="row" spacing={20}>
-              <SetTimer type="pump" value="0" />
-
-              <Stack direction="row" spacing={6}>
-                <SetButton type="pump" value={button.pumpButton} afunc={submitStatus} />
-                <SetButton type="light" value={button.lightButton} afunc={submitStatus} />
+          
+            <Stack direction="row" spacing={6}>
+              <Stack spacing={6}>
+                <SetTimer type="pump" value="0" />
+                <SetTimer type="light" value="0" />         
               </Stack>
+                <Stack spacing={10}>
+                  <Stack direction="row" spacing={6}>
+                    <SetButton type="pump" value={button.pumpButton} afunc={submitStatus} />
+                    <SetButton type="light" value={button.lightButton} afunc={submitStatus} />
+                  </Stack>
+                  <ScheduleDataTable />
+                </Stack>            
             </Stack>
-            <SetTimer type="light" value="0" />
-          </Stack>
+          
         </Stack>
+      </Box>
+        
       </LocalizationProvider>
     </div>
   )

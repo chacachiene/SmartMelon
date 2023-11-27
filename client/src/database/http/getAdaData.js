@@ -11,7 +11,6 @@ export const getAll = async (feed) => {
 export const getLastValue = async (feed) => {
   try {
     const response = await sensorAPI.getLastValue(feed)
-    console.log("get last value", response.value)
     return response.value
   } catch (error) {
     console.error(error)

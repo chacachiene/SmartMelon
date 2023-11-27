@@ -4,6 +4,8 @@ import App from "./App"
 import authReducer from "./state"
 import buttonReducer from "state/button_time"
 import sensorReducer from "state/sensor"
+import thresHoldReducer from "state/threshold"
+import notiReducer from "state/noti"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import {
@@ -19,7 +21,7 @@ import {
 import storage from "redux-persist/lib/storage"
 import { PersistGate } from "redux-persist/integration/react"
 
-import { combineReducers } from "redux";
+import { combineReducers } from "redux"
 
 const persistConfig = {
   key: "root",
@@ -31,7 +33,9 @@ const rootReducer = combineReducers({
   auth: persistReducer(persistConfig, authReducer),
   button: buttonReducer,
   sensor: sensorReducer,
-});
+  threshold: thresHoldReducer,
+  noti: notiReducer,
+})
 
 const store = configureStore({
   reducer: rootReducer,
