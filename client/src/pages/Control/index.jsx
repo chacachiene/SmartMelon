@@ -51,11 +51,9 @@ function Control() {
     if (type === "pump") {
       publish("pump-button", value.toString()+':1')
     } else if (type === "light") {
-      dispatch(setLightButton(parseInt(value)))
-      
+      publish("led-button", value.toString()+':1')
     }
   }
-
 
   return (
     <div>

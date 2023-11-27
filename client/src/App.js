@@ -30,13 +30,7 @@ import {
   setTempThreshold,
   setMoisThreshold,
 } from "state/threshold"
-import {
-  setLightNoti,
-  setHumiNoti,
-  setTempNoti,
-  setMoisNoti,
-  setSum,
-} from "state/noti"
+import { setLightNoti, setHumiNoti, setTempNoti, setMoisNoti, setSum } from "state/noti"
 
 import { getNum, getNoti } from "pages/Noti/getNoti"
 import { setPumpButton, setLightButton } from "state/button_time"
@@ -95,13 +89,17 @@ function App() {
 
   useEffect(() => {
     const fetchDataThreshold = async () => {
-      let threshold = await getAll("threshold")
-      let noti = getNoti(threshold)
+      try {
+        let threshold = await getAll("threshold")
+        let noti = getNoti(threshold)
 
-      dispatch(setLightThreshold(noti.L))
-      dispatch(setTempThreshold(noti.T))
-      dispatch(setHumiThreshold(noti.H))
-      dispatch(setMoisThreshold(noti.M))
+        dispatch(setLightThreshold(noti.L))
+        dispatch(setTempThreshold(noti.T))
+        dispatch(setHumiThreshold(noti.H))
+        dispatch(setMoisThreshold(noti.M))
+      } catch (err) {
+        console.log(err)
+      }
     }
     const fetchDataSensor = async () => {
       try {
@@ -117,47 +115,11 @@ function App() {
       } catch (err) {
         console.log(err)
       }
-      
     }
 
     fetchDataThreshold()
     fetchDataSensor()
-  },[])
-  // useEffect(() => {
-  //   var sum = 0
-  //   const checkAndSetNoti = (type, value, threshold, prefix) => {
-  //     const lower = Number(threshold[0])
-  //     const upper = Number(threshold[1])
-  //     var content = ""
-  //     if (value <lower){
-  //     content = `${type} ${value} is low than threshold`}
-  //     else if (value > upper){
-  //      content = `${type} ${value} is high than threshold`
-  //   }
-
-  //   if (type === "light") {
-  //     dispatch(setLightNoti(content))
-  //     sum++
-  //   } else if (type === "temp") {
-  //     dispatch(setTempNoti(content))
-  //     sum++
-  //   }
-  //   else if (type === "humi") {
-  //     dispatch(setHumiNoti(content))
-  //     sum++
-  //   }
-  //   else if (type === "mois") {
-  //     dispatch(setMoisNoti(content))
-  //     sum++
-  //   }
-  // }
-  //   checkAndSetNoti("light", light, lightThreshold, "light")
-  //   checkAndSetNoti("temp", temp, tempThreshold, "temp")
-  //   checkAndSetNoti("humi", humi, humiThreshold, "humi")
-  //   checkAndSetNoti("mois", mois, moisThreshold, "mois")
-  //   dispatch(setSum(sum))
-    
-  // }, [])
+  }, [])
 
   return (
     <div className="app">
