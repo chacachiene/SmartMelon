@@ -103,11 +103,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
 
 const key = [
   { text: "Overview", path: "/dashboard" },
-  { text: "Energy Management", path: "/visualize" },
+  { text: "Energy Management", path: "/visualize/light" },
   { text: "Device", path: "/setup" },
   { text: "Control", path: "/control" },
   { text: "Logout", path: "/login" },
-]
+];
 
 export default function SideBar() {
   const navigate = useNavigate()
