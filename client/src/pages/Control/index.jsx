@@ -23,41 +23,11 @@ function Control() {
   const button = useSelector((state) => state.button)
 
 
-  // client.on("message", (topic, message, packet) => {
-  //   const value = Number(message.toString().split(":")[0]);
-  //   console.log("received message " + topic + ": " + message)
-  //   const lastSlashIndex = topic.toString().lastIndexOf("/")
-  //   const name = topic.toString().substring(lastSlashIndex + 1)
-  //   console.log("name is: ", name)
-  //   console.log("value is: ", value)
-    
-  // })
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try{
-      let pumpStatus = await getLastValue("pump-button")
-      const pumpVar = Number(pumpStatus.split(":")[0]);
-      
-      dispatch(setPumpButton(pumpVar))
-
-      let lightStatus = await getLastValue("led-button")
-      const lightVar = Number(lightStatus.split(":")[0]);
-      dispatch(setLightButton(parseInt(lightVar)))}
-      catch(err){
-        console.log(err)
-      }
-    }
-    fetchData()
-  }, [])
-
   const submitStatus = (type,value) => {
     if (type === "pump") {
       publish("pump-button", value.toString()+':1')
     } else if (type === "light") {
       publish("led-button", value.toString()+':1')
-      
     }
   }
 

@@ -32,6 +32,7 @@ import {
   setMoisThreshold,
 } from "state/threshold"
 import { setLightVisual, setHumiVisual,setMoisVisual,setTempVisual } from "state/visualize"
+import { setLightTime, setPumpTime } from "state/clock"
 
 import { getNum, getNoti } from "pages/Noti/getNoti"
 import { setPumpButton, setLightButton } from "state/button_time"
@@ -151,9 +152,62 @@ function App() {
         console.log(err)
       }
     }
+    const separateValue = (data) => {
+      return data.map((item) => {
+        const [fromTo, value] = item.value.split('*');
+        const [from, to] = fromTo.split('_');
+        
+        return {
+          id: item.id,
+          feed_key: item.feed_key,
+          created_at: item.created_at,
+          from,
+          to,
+          value: Number(value), // Assuming 'value' is a number, convert it to the appropriate type
+        };
+      });
+    };
+    
+    const fetchAllDataClock = async () => {
+      try {
+        const pumpTimeData = await getAll("pump-time")
+        const ledTimeData = await getAll("led-time")
+        const pumpTime = [];
+        const lightTime = [];
+        pumpTimeData.forEach((item, index) => {
+          pumpTime.push({id:item.id,feed_key:item.feed_key, created_at: item.created_at, value: (item.value) });
+        });
+        ledTimeData.forEach((item, index) => {
+          lightTime.push({id:item.id,feed_key:item.feed_key, created_at: item.created_at, value: (item.value) });
+        });
+
+        const pumpTimeClean = separateValue(pumpTime);
+        const lightTimeClean = separateValue(lightTime);
+        dispatch(setLightTime(lightTimeClean))
+        dispatch(setPumpTime(pumpTimeClean))
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    const fetchDataButton = async () => {
+      try{
+      let pumpStatus = await getLastValue("pump-button")
+      const pumpVar = Number(pumpStatus.split(":")[0]);
+      dispatch(setPumpButton(pumpVar))
+
+      let lightStatus = await getLastValue("led-button")
+      const lightVar = Number(lightStatus.split(":")[0]);
+      dispatch(setLightButton(parseInt(lightVar)))}
+      catch(err){
+        console.log(err)
+      }
+    }
+    fetchDataButton()
     fetchAllDataSensor()
-    fetchDataThreshold()
+    fetchAllDataClock()
     fetchDataSensor()
+    fetchDataThreshold()
+
   }, [])
 
   return (

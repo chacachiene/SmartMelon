@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Swal from "sweetalert2";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { useSelector } from "react-redux"
 
 function createData(name, code, population, size) {
   const density = population / size;
@@ -38,6 +39,14 @@ const rows = [
 export default function ScheduleDataTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  
+
+  // this is data for render table
+  const pumpClock = useSelector((state) => state.clock.pump)
+  const lightClock = useSelector((state) => state.clock.light)
+
+  console.log("at setup page: ", pumpClock)
+  console.log("at setup page: ", lightClock)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -69,6 +78,7 @@ export default function ScheduleDataTable() {
   };
 
   return (
+    <>
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
          <Typography
             gutterBottom
@@ -142,5 +152,16 @@ export default function ScheduleDataTable() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
+
+    
+    {pumpClock.map((row) => {
+      return (
+        <div>
+          <span>{row.feed_key}</span> <span>{row.from}</span> <span>{row.from}</span> <span>{row.to}</span> <span>{row.value}</span>
+        </div>
+      );
+    })}
+    </>
+
   );
 }
