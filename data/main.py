@@ -1,17 +1,12 @@
 from fastapi import FastAPI, HTTPException, Depends
-
 from typing import Annotated, List
-
 from fastapi.middleware.cors import CORSMiddleware
-
 from pydantic import BaseModel, Field
-
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 import numpy as np
 import pickle as pkl
 from tensorflow.keras.models import load_model
-
 
 class YourPydanticModel(BaseModel):
     data: List[int]
@@ -45,12 +40,10 @@ def split_series(series, past_num, future_num):
         y.append(f)
     return np.array(X), np.array(y)
 
-
 past_num = 24
 future_num = 24
 n_feature = 1
 fam = ['temp']
-
 
 def get_model(data):
 
@@ -58,7 +51,6 @@ def get_model(data):
     scaled_use =scaler.fit_transform(data_array)
     
     input_data = np.array(data).reshape((n_feature, future_num, n_feature))
-    
     
     filenm = 'pred.pickle'
 
