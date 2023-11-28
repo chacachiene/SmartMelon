@@ -19,6 +19,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { blue } from "@mui/material/colors";
 
 const ChartPage = ({ Namepage, data }) => {
   const [dataSuccess, setDataSuccess] = useState(false);
@@ -41,7 +42,6 @@ const ChartPage = ({ Namepage, data }) => {
     22, 23, 24,
   ];
   const getPredict = () => {
-    // Assuming you have data to send
     const dataToSend = {
       data: temp,
     };
@@ -124,11 +124,13 @@ const ChartPage = ({ Namepage, data }) => {
                   series={[
                     {
                       data: dataSeries,
-                      area: true,
+                      label: "Data Real",
+                      color: "blue",
                     },
                     {
                       data: tempPredict,
-                      area: true,
+                      label: "Data Predict",
+                      color: "orange",
                     },
                   ]}
                 />
