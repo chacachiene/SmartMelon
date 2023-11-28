@@ -1,6 +1,6 @@
 import { Box, Grid, Paper, Typography, Button, Container } from "@mui/material"
 import React from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 
 import { useNavigate } from "react-router-dom"
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
@@ -14,8 +14,6 @@ function DashBoard() {
   const humi = useSelector((state) => state.sensor.humi)
   const light = useSelector((state) => state.sensor.light)
   const mois = useSelector((state) => state.sensor.mois)
-
-
 
   return (
     <>

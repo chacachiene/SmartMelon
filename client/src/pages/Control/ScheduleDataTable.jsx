@@ -10,18 +10,21 @@ import TableRow from '@mui/material/TableRow';
 import Typography from "@mui/material/Typography";
 import Swal from "sweetalert2";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { useDispatch } from "react-redux"
+import { deleteValue } from 'database/http/deleteData';
 import { useSelector } from "react-redux"
-
+import { useEffect } from "react"                                   
+import { setPumpTime, setLightTime } from "state/clock"
 
 export default function ScheduleDataTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  
+
 
   // this is data for render table
   const pumpClock = useSelector((state) => state.clock.pump)
   const lightClock = useSelector((state) => state.clock.light)
+  const dispatch = useDispatch()
 
   console.log("at setup page pump: ", pumpClock)
   console.log("at setup page light: ", lightClock)
@@ -35,7 +38,7 @@ export default function ScheduleDataTable() {
     setPage(0);
   };
 
-  const deleteUser = (id) => {
+  const deleteUser = (id,feed_key) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -46,13 +49,17 @@ export default function ScheduleDataTable() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.value) {
-        deleteApi(id);
+        deleteApi(id,feed_key);
       }
     });
   };
 
-  const deleteApi = async (id) => {
+  const deleteApi = async (id,feed_key) => {
     Swal.fire("Deleted!", "Your file has been deleted.", "success");
+    const valdel = await deleteValue(feed_key,id);
+    dispatch(setPumpTime(pumpClock.filter((item) => item.id !== id)))
+    dispatch(setLightTime(lightClock.filter((item) => item.id !== id)))
+    
   };
 
   const currentTime = new Date();
@@ -116,7 +123,7 @@ export default function ScheduleDataTable() {
                                 cursor: "pointer",
                               }}
                               onClick={() => {
-                                deleteUser(row.id);
+                                deleteUser(row.id, row.feed_key);
                               }}
                             />
                         </TableCell>

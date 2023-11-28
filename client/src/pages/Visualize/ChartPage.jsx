@@ -21,10 +21,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 const ChartPage = ({ Namepage, data }) => {
-<<<<<<< HEAD
   const [dataSuccess, setDataSuccess] = useState(false);
-=======
->>>>>>> data
   const [dataSeries, setDataSeries] = useState(
     Array.from({ length: 24 }, (_, index) => null)
   );
@@ -32,11 +29,6 @@ const ChartPage = ({ Namepage, data }) => {
     Array.from({ length: 24 }, (_, index) => null)
   );
   const dataAxis = Array.from({ length: 24 }, (_, index) => index);
-<<<<<<< HEAD
-  const [selectedDate, setSelectedDate] = useState(dayjs());
-
-  useEffect(() => {
-=======
   const [selectedDate, setSelectedDate] = useState(
     dayjs("2023-10-29T15:07:15Z")
   );
@@ -73,7 +65,6 @@ const ChartPage = ({ Namepage, data }) => {
 
 
   useEffect(() => {
->>>>>>> data
     if (selectedDate) {
       const selectedDay = dayjs(selectedDate).format("DD/MM/YYYY");
 
@@ -86,7 +77,6 @@ const ChartPage = ({ Namepage, data }) => {
         }
       });
 
-<<<<<<< HEAD
       if (dataSeries1[0] === null) dataSeries1[0] = 60;
       for (let i = 1; i < 24; i++) {
         if (dataSeries1[i] === null) dataSeries1[i] = dataSeries1[i - 1];
@@ -96,20 +86,10 @@ const ChartPage = ({ Namepage, data }) => {
       setDataSeries(tempDataSeries);
     }
   }, [selectedDate, data]);
-=======
-      // Gán dataSeries1 vào một mảng tạm thời
-      const tempDataSeries = [...dataSeries1];
-      setDataSeries(tempDataSeries);
-    }
-  }, [selectedDate]);
-
-  // ...
->>>>>>> data
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
-<<<<<<< HEAD
   if (dataSuccess)
     return (
       <>
@@ -180,76 +160,6 @@ const ChartPage = ({ Namepage, data }) => {
                       </Button>
                     </div>
                   </Grid>
-=======
-  // useEffect(() => {
-  //   setDataSeries(dataSeries1)
-  // }, [dataSeries1])
-  // useEffect(() => {
-  //   console.log("dataseries12312312", dataSeries)
-  // }, [dataSeries])
-  return (
-    <>
-      <Container>
-        <Typography
-          variant="h3"
-          sx={{ marginBottom: "10px", marginTop: "10px" }}
-        >
-          Energy Management/
-          {Namepage}
-        </Typography>
-        <Paper>
-          <Grid container>
-            <Grid item xs={10}>
-              <LineChart
-                xAxis={[
-                  {
-                    data: dataAxis,
-                  },
-                ]}
-                series={[
-                  {
-                    data: dataSeries,
-                    area: true,
-                  },
-                ]}
-                style={{ width: "100%" }}
-                height={300}
-              />
-              <Grid container>
-                <Grid item xs={1}></Grid>
-                <Grid item xs={3}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      value={selectedDate}
-                      onChange={handleDateChange}
-                    />
-                  </LocalizationProvider>
-                </Grid>
-                <Grid item xs={4}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <h3>Status: Normal</h3>
-                  </div>
-                </Grid>
-                <Grid item xs={4}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <h3>Current: 80%</h3>
-                    <Button>
-                      <Cached fontSize="large" />
-                    </Button>
-                  </div>
->>>>>>> data
                 </Grid>
               </Grid>
 
@@ -277,7 +187,6 @@ const ChartPage = ({ Namepage, data }) => {
                 </ButtonContainer>
               </Grid>
             </Grid>
-<<<<<<< HEAD
           </Paper>
         </Container>
       </>
@@ -298,14 +207,6 @@ const BaseChart = styled(LineChart)`
     }
   }
 `;
-=======
-          </Grid>
-        </Paper>
-      </Container>
-    </>
-  );
-};
->>>>>>> data
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,

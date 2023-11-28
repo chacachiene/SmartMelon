@@ -17,6 +17,10 @@ const sensorAPI = {
     getLastValue(feed_id){
         const url = `${username}/feeds/${feed_id}/data/last`;
         return axiosClient.get(url, options);
+    },
+    deleteValue(feed_id, id){
+        const url = `${username}/feeds/${feed_id}/data/${id}`;
+        return axiosClient.delete(url, options);
     }
 }
 

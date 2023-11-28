@@ -13,6 +13,8 @@ import { style } from "@mui/system";
 import { Box } from "@mui/system";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { setLightTime, setPumpTime } from "state/clock";
 
 const mb = { marginBottom: 8 };
 
@@ -48,6 +50,9 @@ function valueLabelFormat(value) {
 }
 
 const SetTimer = (props) => {
+  const dispatch = useDispatch();
+  const pumpTime = useSelector((state) => state.clock.pump);
+  const lightTime = useSelector((state) => state.clock.light);
   const currentTime = new Date();
 
   const initialValues = {
@@ -76,11 +81,15 @@ const SetTimer = (props) => {
       let message = "Time range set";
 
       if (props.type === "pump") {
+        var data =  fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString()
+        dispatch(setPumpTime([...pumpTime, data]));
         publish(
           "pump-time",
           fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString()
         );
       } else if (props.type === "light") {
+        var dataLight =  fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString()
+        dispatch(setLightTime([...lightTime, dataLight]));
         publish(
           "led-time",
           fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString()
