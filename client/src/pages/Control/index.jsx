@@ -21,7 +21,7 @@ import client from "database/mqtt/mqtt.js"
 function Control() {
   const dispatch = useDispatch()
   const button = useSelector((state) => state.button)
-
+  
 
   const submitStatus = (type,value) => {
     if (type === "pump") {

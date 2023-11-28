@@ -44,7 +44,7 @@ function valueLabelFormat(value) {
 
 function SetButton(props) {
   const dispatch = useDispatch()
-
+  const mode = useSelector((state) => state.auth.mode)
   const [sliderEnabled, setSliderEnabled] = useState(false)
 
   useEffect(() => {
@@ -72,12 +72,33 @@ function SetButton(props) {
     props.afunc(props.type,0)
   }
 
+  
+
   let Color1 = "#FBFF47"
   let Color2 = "#E6F7FF"
   if (props.type === "pump") {
-    Color1 = "#B3E0FF"
-    Color2 = "#E6F7FF"
+    if(mode==="light"){
+      Color1 = "#B3E0FF"
+      Color2 = "#E6F7FF"
+    }
+    else{
+      Color1 = "#00D1FF"
+      Color2 = "#0098BA"
+    }
   }
+  if(props.type === "light"){
+    if (mode === "light") {
+      Color1 = "#FBFF47";
+      Color2 = "#E6F7FF";
+    } else {
+      Color1 = "#FF7A5D";
+      Color2 = "#DD725B";
+    }
+  }
+
+  
+
+  
 
   return (
     <Box

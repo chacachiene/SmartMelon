@@ -19,6 +19,7 @@ import ListItemText from "@mui/material/ListItemText"
 import InboxIcon from "@mui/icons-material/MoveToInbox"
 import MailIcon from "@mui/icons-material/Mail"
 import { useNavigate } from "react-router-dom"
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 
 import { useDispatch } from "react-redux"
 import { setLogout } from "state"
@@ -124,8 +125,12 @@ export default function SideBar() {
     setOpen(false)
   }
 
+  
+
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{
+      display: "flex",
+    }}>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           {open ? (
@@ -172,7 +177,7 @@ export default function SideBar() {
                   }}
                 >
                   {item.text === "Overview" && <AssessmentOutlined />}
-                  {item.text === "Energy Management" && <ManageSearchOutlined />}
+                  {item.text === "Energy Management" && <AutoGraphIcon />}
                   {item.text === "Device" && <MemoryOutlined />}
                   {item.text === "Control" && <TuneOutlined />}
                   {item.text === "Logout" && <PowerSettingsNewOutlined />}
