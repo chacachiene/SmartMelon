@@ -10,6 +10,7 @@ import Control from "pages/Control"
 import Visualize from "pages/Visualize"
 import Threshold from "pages/Threshold"
 import History from "pages/History/History"
+import Test from "pages/Test"
 
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
@@ -230,6 +231,7 @@ function App() {
                 <Route path="/visualize/light" element={<Visualize Namepage={"Lighting Status"} />} />
                 <Route path="/visualize/humidity-status" element={<Visualize />} />
                 <Route path="/visualize/soil-moisture-status" element={<Visualize />} /> */}
+            <Route path='/test' element = {<Test/>}/>
             </Route>
         </Routes>
         ) : (
