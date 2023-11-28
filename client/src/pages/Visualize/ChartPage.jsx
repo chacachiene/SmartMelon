@@ -29,18 +29,18 @@ const ChartPage = ({ Namepage, data }) => {
     Array.from({ length: 24 }, (_, index) => null)
   );
   const dataAxis = Array.from({ length: 24 }, (_, index) => index);
-  const [selectedDate, setSelectedDate] = useState(
-    dayjs("2023-10-29T15:07:15Z")
-  );
+  const [selectedDate, setSelectedDate] = useState(dayjs());
 
-  const [tempPredict, setTempPredict] = useState([]);
+  const [tempPredict, setTempPredict] = useState(
+    Array.from({ length: 24 }, (_, index) => null)
+  );
 
   //////////////////// PREDICT DATA ///////////////////////
   const temp = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
     22, 23, 24,
   ];
-  useEffect(() => {
+  const getPredict = () => {
     // Assuming you have data to send
     const dataToSend = {
       data: temp,
@@ -61,9 +61,9 @@ const ChartPage = ({ Namepage, data }) => {
       .catch((error) => {
         // Handle errors
         console.error("Error:", error);
+        alert(error.message);
       });
-  }, []);
-  //////////////////////////////////////////////////////////
+  };
 
   useEffect(() => {
     if (selectedDate) {
@@ -88,8 +88,6 @@ const ChartPage = ({ Namepage, data }) => {
     }
   }, [selectedDate, data]);
 
-  // ...
-
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
@@ -109,7 +107,9 @@ const ChartPage = ({ Namepage, data }) => {
               <Grid item xs={12}>
                 {(Namepage === "Lighting Status" ||
                   Namepage === "Humity Status") && (
-                  <Button variant="contained">Focast</Button>
+                  <Button variant="contained" onClick={getPredict}>
+                    Focast
+                  </Button>
                 )}
               </Grid>
 
@@ -124,6 +124,10 @@ const ChartPage = ({ Namepage, data }) => {
                   series={[
                     {
                       data: dataSeries,
+                      area: true,
+                    },
+                    {
+                      data: tempPredict,
                       area: true,
                     },
                   ]}
@@ -196,7 +200,20 @@ const ChartPage = ({ Namepage, data }) => {
     );
   return <>No Data</>;
 };
-
+const BaseChart = styled(LineChart)`
+  @media screen and (max-width: 768px) {
+    .chart-container {
+      height: 400px;
+      width: 600px;
+    }
+  }
+  @media screen and (max-width: 2000px) {
+    .chart-container {
+      height: 400px;
+      width: 600px;
+    }
+  }
+`;
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
