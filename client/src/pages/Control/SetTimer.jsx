@@ -12,12 +12,8 @@ import { publish } from "database/mqtt/mqtt"
 import { style } from "@mui/system"
 import { Box } from "@mui/system"
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Swal from "sweetalert2";
 
-const initialValues = {
-  from: "2023-10-30T14:00:000.00",
-  to: "2023-10-31T14:05:000.00",
-  level: 50,
-}
 
 const mb = { marginBottom: 8 }
 
@@ -53,6 +49,13 @@ function valueLabelFormat(value) {
 }
 
 const SetTimer = (props) => {
+  const currentTime = new Date();
+
+  const initialValues = {
+    from: currentTime.toISOString().slice(0, -1), // Set from as current time
+    to: currentTime.toISOString().slice(0, -1), // Set to as current time
+    level: 50,
+  };
   const [sliderValue, setSliderValue] = useState(initialValues.level)
 
   const handleSliderChange = (event, newValue) => {
@@ -60,29 +63,41 @@ const SetTimer = (props) => {
   }
 
   const handleSubmit = (values, { setSubmitting }) => {
-    let fromTime = values.from.slice(0, -7)
-    let toTime = values.to.slice(0, -7)
+    let fromTime = values.from.slice(0, -7);
+    let toTime = values.to.slice(0, -7);
 
     if (toTime < fromTime) {
-      console.log("Invalid time range")
-      alert("End time must be greater than or equal to start time")
+      console.log("Invalid time range");
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Time Range",
+        text: "End time must be greater than or equal to start time",
+      });
     } else {
+      let message = "Time range set";
+
       if (props.type === "pump") {
         publish(
           "pump-time",
-          fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString(),
-        )
+          fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString()
+        );
       } else if (props.type === "light") {
         publish(
           "led-time",
-          fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString(),
-        )
+          fromTime.toString() + "_" + toTime.toString() + "*" + sliderValue.toString()
+        );
       } else {
-        console.log("error")
+        console.log("error");
+        message = "Error: Invalid Type";
       }
-      alert("Time range set")
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: message,
+      });
     }
-  }
+  };
 
   let Color1 = "#FDFFA0"
   let Color2 = "#E6F7FF"
@@ -104,7 +119,7 @@ const SetTimer = (props) => {
       borderRadius: "10px",
       padding: "5px",
       boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-      width: isSmallScreen ? "220px" : "100%", // Change the width to your desired size
+      width: isSmallScreen ? "300px" : "100%", // Change the width to your desired size
       maxWidth: "500px",
       height: "50%",
       background: `linear-gradient(to bottom, ${Color1}, ${Color2})`,
@@ -183,15 +198,24 @@ const SetTimer = (props) => {
             />
           </div>
 
-          <Stack Stack spacing={2} direction="row">
-            <Button type='reset' variant="contained" >
-              Reset
-            </Button>
-            <Button type='submit' variant="contained" color="success" size="large" >
-              Submit
-            </Button>
-            
-          </Stack>
+          <Box
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "20px", // Adjust margin as needed
+              }}
+            >
+            <Stack Stack spacing={2} direction="row">
+              <Button type='reset' variant="contained" >
+                Reset
+              </Button>
+              <Button type='submit' variant="contained" color="success" size="large" >
+                Submit  
+              </Button>
+              
+            </Stack>
+          </Box>
         </Form>
       )}
     </Formik>
