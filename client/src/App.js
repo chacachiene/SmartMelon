@@ -83,78 +83,80 @@ function App() {
   useEffect(() => {
     const fetchDataThreshold = async () => {
       try {
-        let threshold = await getAll("threshold")
-        let noti = getNoti(threshold)
+        let threshold = await getAll("threshold");
+        let noti = getNoti(threshold);
 
-        dispatch(setLightThreshold(noti.L))
-        dispatch(setTempThreshold(noti.T))
-        dispatch(setHumiThreshold(noti.H))
-        dispatch(setMoisThreshold(noti.M))
+        dispatch(setLightThreshold(noti.L));
+        dispatch(setTempThreshold(noti.T));
+        dispatch(setHumiThreshold(noti.H));
+        dispatch(setMoisThreshold(noti.M));
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
-    }
+    };
     const fetchDataSensor = async () => {
       try {
-        const temp_humi = await getLastValue("temp-humi")
-        const [temp, humi] = temp_humi.toString().split(":")
-        const moisData = await getLastValue("soil-moisture")
-        const lightData = await getLastValue("light-sensor")
+        const temp_humi = await getLastValue("temp-humi");
+        const [temp, humi] = temp_humi.toString().split(":");
+        const moisData = await getLastValue("soil-moisture");
+        const lightData = await getLastValue("light-sensor");
 
-        dispatch(setTempSensor(parseFloat(temp).toFixed(2)))
-        dispatch(setHumiSensor(parseFloat(humi).toFixed(2)))
-        dispatch(setLightSensor(parseFloat(lightData).toFixed(2)))
-        dispatch(setMoisSensor(parseFloat(moisData).toFixed(2)))
+        dispatch(setTempSensor(parseFloat(temp).toFixed(2)));
+        dispatch(setHumiSensor(parseFloat(humi).toFixed(2)));
+        dispatch(setLightSensor(parseFloat(lightData).toFixed(2)));
+        dispatch(setMoisSensor(parseFloat(moisData).toFixed(2)));
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
-    }
+    };
     const fetchAllDataSensor = async () => {
       try {
-        const temp_humi = await getAll("temp-humi")
-        const moisData = await getAll("soil-moisture")
-        const lightData = await getAll("light-sensor")
-       
+        const temp_humi = await getAll("temp-humi");
+        const moisData = await getAll("soil-moisture");
+        const lightData = await getAll("light-sensor");
+
         const temp = [];
         const humi = [];
         const light = [];
         const mois = [];
 
         temp_humi.forEach((item, index) => {
-
-          const [value1, value2] = item.value.split(':');
+          const [value1, value2] = item.value.split(":");
 
           temp.push({ created_at: item.created_at, value: parseFloat(value1) });
           humi.push({ created_at: item.created_at, value: parseFloat(value2) });
         });
         lightData.forEach((item, index) => {
-          light.push({ created_at: item.created_at, value: parseFloat(item.value) });
+          light.push({
+            created_at: item.created_at,
+            value: parseFloat(item.value),
+          });
         });
         moisData.forEach((item, index) => {
-        
-          mois.push({ created_at: item.created_at, value: parseFloat(item.value) });
+          mois.push({
+            created_at: item.created_at,
+            value: parseFloat(item.value),
+          });
         });
-
-
 
         // dispatch(setTempSensor(parseFloat(temp).toFixed(2)))
         // dispatch(setHumiSensor(parseFloat(humi).toFixed(2)))
-        dispatch(setLightVisual(mois))
-        dispatch(setMoisVisual(light))
-        dispatch(setTempVisual(temp))
-        dispatch(setHumiVisual(humi))
-        console.log("all light", light)
-        console.log("all mois", mois )
-        console.log("temp ", temp )
-        console.log("humi ", humi )
+        dispatch(setLightVisual(light));
+        dispatch(setMoisVisual(mois));
+        dispatch(setTempVisual(temp));
+        dispatch(setHumiVisual(humi));
+        console.log("all light", light);
+        console.log("all mois", mois);
+        console.log("temp ", temp);
+        console.log("humi ", humi);
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
-    }
-    fetchAllDataSensor()
-    fetchDataThreshold()
-    fetchDataSensor()
-  }, [])
+    };
+    fetchAllDataSensor();
+    fetchDataThreshold();
+    fetchDataSensor();
+  }, []);
 
   return (
     <div className="app">
@@ -163,22 +165,40 @@ function App() {
           <CssBaseline />
 
           {user ? (
-        <Routes>
-          <Route element={<LayOut />}>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<DashBoard />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/control" element={<Control />} />
-            <Route path="/setup" element={<ThresholdGeneral />} />
-            <Route path="/visualize" element={<Visualize />} />
-                
+            <Routes>
+              <Route element={<LayOut />}>
+                <Route
+                  path="/"
+                  element={<Navigate to="/dashboard" replace />}
+                />
+                <Route path="/dashboard" element={<DashBoard />} />
+                <Route path="/history" element={<History />} />
+                <Route path="/control" element={<Control />} />
+                <Route path="/setup" element={<ThresholdGeneral />} />
+                <Route
+                  path="/visualize/light"
+                  element={<Visualize val={0} />}
+                />
+                <Route
+                  path="/visualize/temperature"
+                  element={<Visualize val={1} />}
+                />
+                <Route
+                  path="/visualize/humity"
+                  element={<Visualize val={2} />}
+                />
+                <Route
+                  path="/visualize/soil_moiture"
+                  element={<Visualize val={3} />}
+                />
+
                 {/* <Route path="/visualize/temperature" element={<Visualize Namepage={"Temperature Status"} />} />
                 <Route path="/visualize/light" element={<Visualize Namepage={"Lighting Status"} />} />
                 <Route path="/visualize/humidity-status" element={<Visualize />} />
                 <Route path="/visualize/soil-moisture-status" element={<Visualize />} /> */}
-            </Route>
-        </Routes>
-        ) : (
+              </Route>
+            </Routes>
+          ) : (
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<Login />} />
@@ -188,6 +208,6 @@ function App() {
         </ThemeProvider>
       </BrowserRouter>
     </div>
-  )
+  );
 }
 export default App

@@ -38,6 +38,10 @@ const ThresholdGeneralSetting = ({ submitOnDb }) => {
   const handlerSubmit = () => {
     console.log(upper, lower);
     console.log(selectedSquare);
+    if (upper < lower) {
+      alert("Lower can't bigger than upper");
+      return;
+    }
     var value = upper.toString() + ":" + lower.toString();
     if (selectedSquare === 1) {
       submitOnDb("M" + value);
@@ -76,14 +80,14 @@ const ThresholdGeneralSetting = ({ submitOnDb }) => {
     <Container>
       <Typography
         variant="h3"
-        sx={{ marginBottom: "30px", marginTop: "10px", width: "100%" }}
+        sx={{ marginBottom: "60px", marginTop: "10px", width: "100%" }}
       >
         Energy Management/ Threshold General Setting
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={7} xl={7}>
           <Paper>
-            <Grid container spacing={2}>
+            <Grid container spacing={4}>
               <Grid
                 item
                 xs={6}
@@ -95,9 +99,9 @@ const ThresholdGeneralSetting = ({ submitOnDb }) => {
               >
                 <Square
                   selected={selectedSquare === 1}
-                  onClick={() => handleSquareClick(1, "Soll Moisure Sensor")}
+                  onClick={() => handleSquareClick(1, "Soil Moisure Sensor")}
                 >
-                  <h3>Soll Moisure Sensor</h3>
+                  <h3>Soil Moisure Sensor</h3>
                   <WaterDropOutlined
                     color="warning"
                     style={{ fontSize: "120px" }}
@@ -171,7 +175,7 @@ const ThresholdGeneralSetting = ({ submitOnDb }) => {
         </Grid>
         <Grid item xs={5} xl={5}>
           <Paper>
-            <Grid container spacing={2}>
+            <Grid container spacing={4}>
               <Grid
                 item
                 xs={12}
