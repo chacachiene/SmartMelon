@@ -157,7 +157,7 @@ export default function ScheduleDataTable() {
     {pumpClock.map((row) => {
       return (
         <div>
-          <span>{row.feed_key}</span> <span>{row.from}</span> <span>{row.from}</span> <span>{row.to}</span> <span>{row.value}</span>
+          <span>{row.feed_key}</span> <span>{row.from}</span>  <span>{row.to}</span> <span>{row.value}</span>
         </div>
       );
     })}
