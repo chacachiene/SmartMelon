@@ -13,28 +13,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useSelector } from "react-redux"
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData('Pump', '1-4-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '30-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '29-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '28-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '27-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '26-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-];
 
 export default function ScheduleDataTable() {
   const [page, setPage] = React.useState(0);
@@ -106,6 +84,9 @@ export default function ScheduleDataTable() {
                   <TableCell align="left" style={{ minWidth: '150px' }}>
                     End
                   </TableCell>
+                  <TableCell align="left" style={{ minWidth: '50px' }}>
+                    Level
+                  </TableCell>
                   <TableCell align="left" style={{ minWidth: '80px' }}>
                     Action
                   </TableCell>
@@ -115,7 +96,8 @@ export default function ScheduleDataTable() {
                 {(pumpClock.concat(lightClock))
                   .filter(row => {
                     // Compare the time end value with the current time
-                    return row.to > currentTime;
+                    let givenDate = new Date(row.to);
+                    return givenDate > currentTime;
                   })
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
@@ -125,6 +107,7 @@ export default function ScheduleDataTable() {
                         <TableCell align="left">{row.created_at}</TableCell>
                         <TableCell align="left">{row.from}</TableCell>
                         <TableCell align="left">{row.to}</TableCell>
+                        <TableCell align="left">{row.value}</TableCell>
                         <TableCell align="left">
                             <DeleteIcon
                               style={{
@@ -155,13 +138,6 @@ export default function ScheduleDataTable() {
     </Paper>
 
     
-    {pumpClock.map((row) => {
-      return (
-        <div>
-          <span>{row.feed_key}</span> <span>{row.from}</span>  <span>{row.to}</span> <span>{row.value}</span>
-        </div>
-      );
-    })}
     </>
 
   );
