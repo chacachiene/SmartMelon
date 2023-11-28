@@ -9,6 +9,11 @@ import Proptype from "prop-types"
 import Switch from "@mui/material/Switch"
 import { setPumpButton, setLightButton } from "state/button_time"
 
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
+import TipsAndUpdatesRoundedIcon from '@mui/icons-material/TipsAndUpdatesRounded';
+import { Stack } from "@mui/system"
+import { yellow } from "@mui/material/colors"
+
 //test
 
 const marks = [
@@ -44,7 +49,7 @@ function valueLabelFormat(value) {
 
 function SetButton(props) {
   const dispatch = useDispatch()
-
+  const mode = useSelector((state) => state.auth.mode)
   const [sliderEnabled, setSliderEnabled] = useState(false)
 
   useEffect(() => {
@@ -72,12 +77,30 @@ function SetButton(props) {
     props.afunc(props.type,0)
   }
 
+  
+
   let Color1 = "#FBFF47"
   let Color2 = "#E6F7FF"
   if (props.type === "pump") {
-    Color1 = "#B3E0FF"
-    Color2 = "#E6F7FF"
+    if(mode==="light"){
+      Color1 = "#B3E0FF"
+      Color2 = "#E6F7FF"
+    }
+    else{
+      Color1 = "#00D1FF"
+      Color2 = "#0098BA"
+    }
   }
+  if(props.type === "light"){
+    if (mode === "light") {
+      Color1 = "#FBFF47";
+      Color2 = "#E6F7FF";
+    } else {
+      Color1 = "#FF7A5D";
+      Color2 = "#DD725B";
+    }
+  }
+
 
   return (
     <Box
@@ -95,7 +118,15 @@ function SetButton(props) {
         background: `linear-gradient(to bottom, ${Color1}, ${Color2})`,
       }}
     >
-      <h3>{props.type}</h3>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        {props.type === 'light' ? (
+          <TipsAndUpdatesRoundedIcon sx={{ color: yellow[800] }} style={{ fontSize: '2rem' }} />
+        ) : (
+          <WaterDropIcon color="primary" style={{ fontSize: '2rem' }} />
+        )}
+        <h3 style={{ marginLeft: '0.5rem' }}>{props.type}</h3>
+      </div>
+      
       <Switch
         checked={sliderEnabled}
         onChange={handleToggleSlider}

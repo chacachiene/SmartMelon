@@ -10,43 +10,24 @@ import TableRow from '@mui/material/TableRow';
 import Typography from "@mui/material/Typography";
 import Swal from "sweetalert2";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { useDispatch } from "react-redux"
+import { deleteValue } from 'database/http/deleteData';
 import { useSelector } from "react-redux"
-
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData('Pump', '1-4-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '30-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '29-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '28-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '27-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '26-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Light', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-  createData('Pump', '20-3-2023', '9:00 pm', '4:00 am'),
-];
+import { useEffect } from "react"                                   
+import { setPumpTime, setLightTime } from "state/clock"
 
 export default function ScheduleDataTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  
+
 
   // this is data for render table
   const pumpClock = useSelector((state) => state.clock.pump)
   const lightClock = useSelector((state) => state.clock.light)
+  const dispatch = useDispatch()
 
-  console.log("at setup page: ", pumpClock)
-  console.log("at setup page: ", lightClock)
+  console.log("at setup page pump: ", pumpClock)
+  console.log("at setup page light: ", lightClock)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -57,7 +38,7 @@ export default function ScheduleDataTable() {
     setPage(0);
   };
 
-  const deleteUser = (id) => {
+  const deleteUser = (id,feed_key) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -68,14 +49,20 @@ export default function ScheduleDataTable() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.value) {
-        deleteApi(id);
+        deleteApi(id,feed_key);
       }
     });
   };
 
-  const deleteApi = async (id) => {
+  const deleteApi = async (id,feed_key) => {
     Swal.fire("Deleted!", "Your file has been deleted.", "success");
+    const valdel = await deleteValue(feed_key,id);
+    dispatch(setPumpTime(pumpClock.filter((item) => item.id !== id)))
+    dispatch(setLightTime(lightClock.filter((item) => item.id !== id)))
+    
   };
+
+  const currentTime = new Date();
 
   return (
     <>
@@ -104,26 +91,30 @@ export default function ScheduleDataTable() {
                   <TableCell align="left" style={{ minWidth: '150px' }}>
                     End
                   </TableCell>
+                  <TableCell align="left" style={{ minWidth: '50px' }}>
+                    Levelx
+                  </TableCell>
                   <TableCell align="left" style={{ minWidth: '80px' }}>
                     Action
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
+                {(pumpClock.concat(lightClock))
+                  .filter(row => {
+                    // Compare the time end value with the current time
+                    let givenDate = new Date(row.to);
+                    return givenDate > currentTime;
+                  })
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
                     return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.code}
-                      >
-                        <TableCell align="left">{row.name}</TableCell>
-                        <TableCell align="left">{row.code}</TableCell>
-                        <TableCell align="left">{row.population}</TableCell>
-                        <TableCell align="left">{row.size}</TableCell>
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                        <TableCell align="left">{row.feed_key}</TableCell>
+                        <TableCell align="left">{row.created_at}</TableCell>
+                        <TableCell align="left">{row.from}</TableCell>
+                        <TableCell align="left">{row.to}</TableCell>
+                        <TableCell align="left">{row.value}</TableCell>
                         <TableCell align="left">
                             <DeleteIcon
                               style={{
@@ -132,7 +123,7 @@ export default function ScheduleDataTable() {
                                 cursor: "pointer",
                               }}
                               onClick={() => {
-                                deleteUser(row.id);
+                                deleteUser(row.id, row.feed_key);
                               }}
                             />
                         </TableCell>
@@ -145,7 +136,7 @@ export default function ScheduleDataTable() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={pumpClock.length + lightClock.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -154,13 +145,6 @@ export default function ScheduleDataTable() {
     </Paper>
 
     
-    {pumpClock.map((row) => {
-      return (
-        <div>
-          <span>{row.feed_key}</span> <span>{row.from}</span>  <span>{row.to}</span> <span>{row.value}</span>
-        </div>
-      );
-    })}
     </>
 
   );

@@ -94,11 +94,12 @@ const Visualize = ({ val }) => {
         />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <ChartPage Namepage="Temperature Status" data={temp} />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
         <ChartPage Namepage="Lighting Status" data={light} />
       </TabPanel>
+      <TabPanel value={value} index={1}>
+        <ChartPage Namepage="Temperature Status" data={temp} />
+      </TabPanel>
+
       <TabPanel value={value} index={2}>
         <ChartPage Namepage="Humity Status" data={humi} />
       </TabPanel>

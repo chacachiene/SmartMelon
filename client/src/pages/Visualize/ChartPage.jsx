@@ -103,6 +103,13 @@ const ChartPage = ({ Namepage, data }) => {
           </Typography>
           <Paper>
             <Grid container style={{ padding: "10px" }}>
+              <Grid item xs={12}>
+                {(Namepage === "Lighting Status" ||
+                  Namepage === "Humity Status") && (
+                  <Button variant="contained">Focast</Button>
+                )}
+              </Grid>
+
               <Grid item xs={10}>
                 <LineChart
                   height={500}
