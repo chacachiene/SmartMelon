@@ -83,7 +83,7 @@ export default function ScheduleDataTable() {
                     Kind
                   </TableCell>
                   <TableCell align="left" style={{ minWidth: '200px' }}>
-                    Date
+                    Date Creating
                   </TableCell>
                   <TableCell align="left" style={{ minWidth: '150px' }}>
                     Start
@@ -108,12 +108,53 @@ export default function ScheduleDataTable() {
                   })
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
+
+                    let formattedFeedKey = row.feed_key.replace("-time", "");
+
+                    let createdDate = new Date(row.created_at);
+
+                    // Format date to "YYYY-MM-DD HH:mm:ss"
+                    let formattedDate = createdDate.toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      timeZone: 'UTC' // Assuming the original date string is in UTC
+                    });
+
+                    
+                    let FromDate = new Date(row.from);
+
+                    // Format date to "YYYY-MM-DD HH:mm" without seconds
+                    let formattedFrom = FromDate.toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      timeZone: 'UTC' // Assuming the original date string is in UTC
+                    });
+
+
+                    let toDate = new Date(row.to);
+
+                    // Format date to "YYYY-MM-DD HH:mm" without seconds
+                    let formattedTo = toDate.toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      timeZone: 'UTC' // Assuming the original date string is in UTC
+                    });
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                        <TableCell align="left">{row.feed_key}</TableCell>
-                        <TableCell align="left">{row.created_at}</TableCell>
-                        <TableCell align="left">{row.from}</TableCell>
-                        <TableCell align="left">{row.to}</TableCell>
+                        <TableCell align="left">{formattedFeedKey}</TableCell>
+                        <TableCell align="left">{formattedDate}</TableCell>
+                        <TableCell align="left">{formattedFrom}</TableCell>
+                        <TableCell align="left">{formattedTo}</TableCell>
                         <TableCell align="left">{row.value}</TableCell>
                         <TableCell align="left">
                             <DeleteIcon
