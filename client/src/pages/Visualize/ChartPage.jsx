@@ -6,7 +6,7 @@ import {
   Box,
   Button,
   Container,
-  Grid,
+  Grid,   
   Paper,
   Stack,
   Typography,
@@ -19,6 +19,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { blue } from "@mui/material/colors";
 
 const ChartPage = ({ Namepage, data }) => {
   const [dataSuccess, setDataSuccess] = useState(false);
@@ -29,40 +30,42 @@ const ChartPage = ({ Namepage, data }) => {
     Array.from({ length: 24 }, (_, index) => null)
   );
   const dataAxis = Array.from({ length: 24 }, (_, index) => index);
-  const [selectedDate, setSelectedDate] = useState(
-    dayjs("2023-10-29T15:07:15Z")
+  const [selectedDate, setSelectedDate] = useState(dayjs());
+
+  const [tempPredict, setTempPredict] = useState(
+    Array.from({ length: 24 }, (_, index) => null)
   );
 
-  const [tempPredict, setTempPredict] = useState([])
-
-
   //////////////////// PREDICT DATA ///////////////////////
-  const temp =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
-  useEffect(() => {
-    // Assuming you have data to send
-      const dataToSend = {
-        data: temp,
-      };
-      // Make a POST request using fetch
-      fetch("http://localhost:8000/predict/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", 
-        },
-        body: JSON.stringify(dataToSend), 
+  const temp = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24,
+  ];
+  const getPredict = () => {
+    const dataToSend = {
+      data: temp,
+      type: Namepage,
+    };
+    console.log("data to send: ", dataToSend)
+    // Make a POST request using fetch
+    fetch("http://localhost:8000/predict/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToSend),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("result from python: ", result);
+        setTempPredict(result.result);
       })
-        .then((response) => response.json()) 
-        .then((result) => {
-          console.log("result from python: ", result);
-          setTempPredict(result.result);
-        })
-        .catch((error) => {
-          // Handle errors
-          console.error("Error:", error);
-        });
-    }, []);
-    //////////////////////////////////////////////////////////
-
+      .catch((error) => {
+        // Handle errors
+        console.error("Error:", error);
+        alert(error.message);
+      });
+  };
 
   useEffect(() => {
     if (selectedDate) {
@@ -104,9 +107,11 @@ const ChartPage = ({ Namepage, data }) => {
           <Paper>
             <Grid container style={{ padding: "10px" }}>
               <Grid item xs={12}>
-                {(Namepage === "Lighting Status" ||
-                  Namepage === "Humity Status") && (
-                  <Button variant="contained">Focast</Button>
+                {(Namepage === "Temperature Status" ||
+                  Namepage === "Humidity Status") && (
+                  <Button variant="contained" onClick={getPredict}>
+                    Focast
+                  </Button>
                 )}
               </Grid>
 
@@ -121,7 +126,13 @@ const ChartPage = ({ Namepage, data }) => {
                   series={[
                     {
                       data: dataSeries,
-                      area: true,
+                      label: "Data Real",
+                      color: "blue",
+                    },
+                    {
+                      data: tempPredict,
+                      label: "Data Predict",
+                      color: "orange",
                     },
                   ]}
                 />
