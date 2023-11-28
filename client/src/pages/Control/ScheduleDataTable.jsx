@@ -85,7 +85,7 @@ export default function ScheduleDataTable() {
                     End
                   </TableCell>
                   <TableCell align="left" style={{ minWidth: '50px' }}>
-                    Level
+                    Levelx
                   </TableCell>
                   <TableCell align="left" style={{ minWidth: '80px' }}>
                     Action

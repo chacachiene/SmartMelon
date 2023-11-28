@@ -11,7 +11,7 @@ import ThresHold from "component/ThresholdForm"
 import sensorAPI from "database/http/sensorAPI"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import { Stack } from "@mui/material"
+import { Stack, Typography } from "@mui/material"
 import ScheduleDataTable from "./ScheduleDataTable"
 
 //get the value of the light and pump
@@ -30,34 +30,32 @@ function Control() {
       publish("led-button", value.toString()+':1')
     }
   }
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   return (
-    <div>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box style={{ padding: '30px' }}>
-        <Stack spacing={2}>
-          <h1>Set Up Page</h1>
-          
-            <Stack direction="row" spacing={6}>
-              <Stack spacing={6}>
-                <SetTimer type="pump" value="0" />
-                <SetTimer type="light" value="0" />         
-              </Stack>
-                <Stack spacing={10}>
-                  <Stack direction="row" spacing={6}>
-                    <SetButton type="pump" value={button.pumpButton} afunc={submitStatus} />
-                    <SetButton type="light" value={button.lightButton} afunc={submitStatus} />
-                  </Stack>
-                  <ScheduleDataTable />
-                </Stack>            
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Box style={{ padding: isSmallScreen ? "10px" : "30px" }}>
+        <Stack spacing={isSmallScreen ? 2 : 6}>
+          <Typography variant="h1">Set Up Page</Typography>
+
+          <Stack direction={isSmallScreen ? "column" : "row"} spacing={isSmallScreen ? 2 : 6}>
+            <Stack spacing={isSmallScreen ? 2 : 6}>
+              <SetTimer type="pump" value="0" />
+              <SetTimer type="light" value="0" />
             </Stack>
-          
+
+            <Stack spacing={isSmallScreen ? 4 : 10}>
+              <Stack direction={isSmallScreen ? "column" : "row"} spacing={isSmallScreen ? 2 : 6}>
+                <SetButton type="pump" value={button.pumpButton} afunc={submitStatus} />
+                <SetButton type="light" value={button.lightButton} afunc={submitStatus} />
+              </Stack>
+              <ScheduleDataTable />
+            </Stack>
+          </Stack>
         </Stack>
       </Box>
-        
-      </LocalizationProvider>
-    </div>
-  )
+    </LocalizationProvider>
+  );
 }
 
 export default Control

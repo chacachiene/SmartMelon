@@ -11,6 +11,7 @@ import FormikFieldDateTimePicker from "component/FormikFieldDateTimePicker/Formi
 import { publish } from "database/mqtt/mqtt"
 import { style } from "@mui/system"
 import { Box } from "@mui/system"
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const initialValues = {
   from: "2023-10-30T14:00:000.00",
@@ -90,6 +91,8 @@ const SetTimer = (props) => {
     Color2 = "#E6F7FF"
   }
 
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
   return (
     <Box
     sx={{
@@ -101,14 +104,22 @@ const SetTimer = (props) => {
       borderRadius: "10px",
       padding: "5px",
       boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-      width: "300ox", // Change the width to your desired size
+      width: isSmallScreen ? "220px" : "100%", // Change the width to your desired size
+      maxWidth: "500px",
       height: "50%",
       background: `linear-gradient(to bottom, ${Color1}, ${Color2})`,
     }}
   > 
     <Formik onSubmit={handleSubmit} initialValues={initialValues}>
       {({ values, errors }) => (
-        <Form style={{ margin: 16, width: "500px" }}>
+        <Form
+        style={{
+          margin: 16,
+          width: "100%", // Full width initially
+          maxWidth: "500px", // Limit maximum width
+          boxSizing: "border-box", // Ensure padding and borders don't add to the width
+        }}
+      >
           <Grid container spacing={0}>
             <Grid container spacing={0}>
               <Grid item xs={12}>
