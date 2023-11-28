@@ -45,8 +45,8 @@ export default function ScheduleDataTable() {
   const pumpClock = useSelector((state) => state.clock.pump)
   const lightClock = useSelector((state) => state.clock.light)
 
-  console.log("at setup page: ", pumpClock)
-  console.log("at setup page: ", lightClock)
+  console.log("at setup page pump: ", pumpClock)
+  console.log("at setup page light: ", lightClock)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -76,6 +76,8 @@ export default function ScheduleDataTable() {
   const deleteApi = async (id) => {
     Swal.fire("Deleted!", "Your file has been deleted.", "success");
   };
+
+  const currentTime = new Date();
 
   return (
     <>
@@ -110,20 +112,19 @@ export default function ScheduleDataTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
+                {(pumpClock.concat(lightClock))
+                  .filter(row => {
+                    // Compare the time end value with the current time
+                    return row.to > currentTime;
+                  })
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
                     return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.code}
-                      >
-                        <TableCell align="left">{row.name}</TableCell>
-                        <TableCell align="left">{row.code}</TableCell>
-                        <TableCell align="left">{row.population}</TableCell>
-                        <TableCell align="left">{row.size}</TableCell>
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                        <TableCell align="left">{row.feed_key}</TableCell>
+                        <TableCell align="left">{row.created_at}</TableCell>
+                        <TableCell align="left">{row.from}</TableCell>
+                        <TableCell align="left">{row.to}</TableCell>
                         <TableCell align="left">
                             <DeleteIcon
                               style={{
@@ -145,7 +146,7 @@ export default function ScheduleDataTable() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={pumpClock.length + lightClock.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
