@@ -35,7 +35,7 @@ import {
 
 } from "@mui/icons-material"
 
-const drawerWidth = 240
+const drawerWidth = 320
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -125,7 +125,6 @@ export default function SideBar() {
     setOpen(false)
   }
 
-  
 
   return (
     <Box sx={{
@@ -133,23 +132,35 @@ export default function SideBar() {
     }}>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          {open ? (
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          ) : (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                ...(open && { display: "none" }),
-              }}
+              {open ? (
+          <>
+            <Typography
+              fontWeight="bold"
+              fontSize="clamp(1.5rem, 2vw, 2rem)"
+              color="primary"
+              paddingRight="4rem"
+              onClick={() => navigate("/dashboard")}
             >
-              <MenuIcon />
+              SmartMelon
+            </Typography>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}   
             </IconButton>
+          </>
+        ) : (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              ...(open && { display: "none" }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
           )}
+          
         </DrawerHeader>
         <Divider />
         <List>
