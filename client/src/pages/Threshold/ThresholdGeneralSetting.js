@@ -105,7 +105,7 @@ const ThresholdGeneralSetting = ({submitOnDb}) => {
         Energy Management/ Threshold General Setting
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={7} xl={7}>
+      <Grid item xs={12} md={6} lg={7}>
           <Paper>
             <Grid container spacing={2}>
               <Grid
@@ -165,7 +165,7 @@ const ThresholdGeneralSetting = ({submitOnDb}) => {
             </Grid>
           </Paper>
         </Grid>
-        <Grid item xs={5} xl={5}>
+        <Grid item xs={12} md={6} lg={5}>
           <Paper>
             <Grid container spacing={3}>
               <Grid
