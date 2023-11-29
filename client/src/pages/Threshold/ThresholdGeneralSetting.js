@@ -8,7 +8,7 @@ import QuantityInput from "component/ThresholdInput"
 import Swal from "sweetalert2";
 
 import { useSelector, useDispatch } from "react-redux"
-
+import { createHistory } from "pages/History/getDataHistory.js"
 
 const ThresholdGeneralSetting = ({submitOnDb}) => {
   const [sensor, setSensor] = useState("Soll Moisure Sensor")
@@ -19,7 +19,7 @@ const ThresholdGeneralSetting = ({submitOnDb}) => {
   const moisThreshold = useSelector((state) => state.threshold.mois)
   const tempThreshold = useSelector((state) => state.threshold.temp)
   const humiThreshold = useSelector((state) => state.threshold.humi)
-
+  const user = useSelector((state) => state.auth.user)
   const handleSquareClick = (square, nameSensor) => {
     setSelectedSquare(square)
     setSensor(nameSensor)
@@ -65,12 +65,19 @@ const ThresholdGeneralSetting = ({submitOnDb}) => {
       else if (selectedSquare === 4) {
         submitOnDb("T" + value)
       }
-  
         Swal.fire({
           title: "Submitted!",
           text: `${datastring} threshold has been submitted.`,
           icon: "success",
         });
+        var who= user.firstName + " " + user.lastName;
+        var message = datastring + " threshold has been set between " + lower.toString() + " and " + upper.toString() + " by "+who+ "."
+        var offset = +7;
+        const history = {
+          description: message,
+          time: new Date( new Date().getTime() + offset * 3600 * 1000).toISOString().replace( / GMT$/, "" )
+        };
+        createHistory(history);
       }
     });
   };

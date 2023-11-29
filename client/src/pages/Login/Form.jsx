@@ -115,14 +115,14 @@ const Form = () => {
         setTimeout(() => {
           navigate("/dashboard");
         }, 3000);
+      
+        var offset = +7;
+        const history = {
+          description: data.user.firstName + ' ' + data.user.lastName + ' logged in',
+          time: new Date( new Date().getTime() + offset * 3600 * 1000).toISOString().replace( / GMT$/, "" )
+        };
+        createHistory(history);
       }
-      var offset = +7;
-      const history = {
-        description: data.user.firstName + ' ' + data.user.lastName + ' logged in',
-        time: new Date( new Date().getTime() + offset * 3600 * 1000).toISOString().replace( / GMT$/, "" )
-      };
-      createHistory(history);
-      console.log("history", history);
     }
   }
 
