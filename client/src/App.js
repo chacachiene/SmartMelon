@@ -36,6 +36,7 @@ import { setLightTime, setPumpTime } from "state/clock"
 
 import { getNum, getNoti } from "pages/Noti/getNoti"
 import { setPumpButton, setLightButton } from "state/button_time"
+
 function App() {
   const mode = useSelector((state) => state.auth.mode)
   const user = Boolean(useSelector((state) => state.auth.user))
@@ -215,11 +216,14 @@ function App() {
         console.log(err)
       }
     }
+
+    // fetchDataHistory()
     fetchDataButton()
     fetchAllDataSensor()
     fetchAllDataClock()
     fetchDataSensor()
     fetchDataThreshold()
+
 
   }, [])
 
