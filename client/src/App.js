@@ -44,6 +44,43 @@ function App() {
   const dispatch = useDispatch()
 
 
+  const separateValue = (data) => {
+    return data.map((item) => {
+      const [fromTo, value] = item.value.split('*');
+      const [from, to] = fromTo.split('_');
+      
+      return {
+        id: item.id,
+        feed_key: item.feed_key,
+        created_at: item.created_at,
+        from,
+        to,
+        value: Number(value), // Assuming 'value' is a number, convert it to the appropriate type
+      };
+    });
+  };
+  const fetchAllDataClock = async () => {
+    try {
+      const pumpTimeData = await getAll("pump-time")
+      const ledTimeData = await getAll("led-time")
+      const pumpTime = [];
+      const lightTime = [];
+      pumpTimeData.forEach((item, index) => {
+        pumpTime.push({id:item.id,feed_key:item.feed_key, created_at: item.created_at, value: (item.value) });
+      });
+      ledTimeData.forEach((item, index) => {
+        lightTime.push({id:item.id,feed_key:item.feed_key, created_at: item.created_at, value: (item.value) });
+      });
+
+      const pumpTimeClean = separateValue(pumpTime);
+      const lightTimeClean = separateValue(lightTime);
+      dispatch(setLightTime(lightTimeClean))
+      dispatch(setPumpTime(pumpTimeClean))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   client.on("message", (topic, message, packet) => {
     const lastSlashIndex = topic.toString().lastIndexOf("/")
     const name = topic.toString().substring(lastSlashIndex + 1)
@@ -78,6 +115,13 @@ function App() {
     if (name === "led-button") {
       const value = Number(message.toString().split(":")[0])
       dispatch(setLightButton(parseInt(value)))
+    }
+    if (name === "pump-time") {
+      
+      fetchAllDataClock()
+    }
+    if (name === "led-time") {
+      fetchAllDataClock()
     }
   })
 
@@ -154,43 +198,10 @@ function App() {
         console.log(err);
       }
     }
-    const separateValue = (data) => {
-      return data.map((item) => {
-        const [fromTo, value] = item.value.split('*');
-        const [from, to] = fromTo.split('_');
-        
-        return {
-          id: item.id,
-          feed_key: item.feed_key,
-          created_at: item.created_at,
-          from,
-          to,
-          value: Number(value), // Assuming 'value' is a number, convert it to the appropriate type
-        };
-      });
-    };
     
-    const fetchAllDataClock = async () => {
-      try {
-        const pumpTimeData = await getAll("pump-time")
-        const ledTimeData = await getAll("led-time")
-        const pumpTime = [];
-        const lightTime = [];
-        pumpTimeData.forEach((item, index) => {
-          pumpTime.push({id:item.id,feed_key:item.feed_key, created_at: item.created_at, value: (item.value) });
-        });
-        ledTimeData.forEach((item, index) => {
-          lightTime.push({id:item.id,feed_key:item.feed_key, created_at: item.created_at, value: (item.value) });
-        });
-
-        const pumpTimeClean = separateValue(pumpTime);
-        const lightTimeClean = separateValue(lightTime);
-        dispatch(setLightTime(lightTimeClean))
-        dispatch(setPumpTime(pumpTimeClean))
-      } catch (err) {
-        console.log(err)
-      }
-    }
+    
+    
+    
     const fetchDataButton = async () => {
       try{
       let pumpStatus = await getLastValue("pump-button")

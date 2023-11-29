@@ -46,7 +46,6 @@ const Visualize = ({ val }) => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(val);
   const temp = useSelector((state) => state.visualize.temp);
-
   const humi = useSelector((state) => state.visualize.humi);
   const light = useSelector((state) => state.visualize.light);
   const mois = useSelector((state) => state.visualize.mois);
@@ -83,7 +82,7 @@ const Visualize = ({ val }) => {
           onClick={() => navigate("/visualize/temperature", { replace: true })}
         />
         <Tab
-          label="Humity"
+          label="Humidity"
           {...a11yProps(2)}
           onClick={() => navigate("/visualize/humity", { replace: true })}
         />
@@ -101,7 +100,7 @@ const Visualize = ({ val }) => {
       </TabPanel>
 
       <TabPanel value={value} index={2}>
-        <ChartPage Namepage="Humity Status" data={humi} />
+        <ChartPage Namepage="Humidity Status" data={humi} />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <ChartPage Namepage="Soil moiture Status" data={mois} />
