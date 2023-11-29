@@ -50,6 +50,11 @@ const Visualize = ({ val }) => {
   const light = useSelector((state) => state.visualize.light);
   const mois = useSelector((state) => state.visualize.mois);
 
+  const tempThreshold = useSelector((state) => state.threshold.temp);
+  const humiThreshold = useSelector((state) => state.threshold.humi);
+  const moisThreshold = useSelector((state) => state.threshold.mois);
+  const lightThreshold = useSelector((state) => state.threshold.light);
+  console.log(tempThreshold, humiThreshold, moisThreshold, lightThreshold)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

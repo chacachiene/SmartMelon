@@ -12,19 +12,19 @@ export const getSampleData = async ( type) => {
     const currentDate = new Date();
     const beforeDate = new Date();
     beforeDate.setDate(currentDate.getDate() - 1);
-
+    console.log(process.env.REACT_APP_X_RAPIDAPI_URL,process.env.REACT_APP_X_RAPIDAPI_KEY,process.env.REACT_APP_X_RAPIDAPI_HOST)
     const yesterday = formatDate(beforeDate);
     const options = {
         method: 'GET',
-        url: 'https://meteostat.p.rapidapi.com/stations/hourly',
+        url: process.env.REACT_APP_X_RAPIDAPI_URL,
         params: {
           station: '48900',
           start: yesterday,
           end: yesterday,
         },
         headers: {
-          'X-RapidAPI-Key': '4569681f82mshc3cbbf99e2a68b1p1ff677jsnaeb74847ac4e',
-          'X-RapidAPI-Host': 'meteostat.p.rapidapi.com'
+          'X-RapidAPI-Key': process.env.REACT_APP_X_RAPIDAPI_KEY,
+          'X-RapidAPI-Host': process.env.REACT_APP_X_RAPIDAPI_HOST,
         }
       };
 
