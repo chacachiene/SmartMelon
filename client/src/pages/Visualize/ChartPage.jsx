@@ -23,6 +23,8 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { blue } from "@mui/material/colors";
 
+import { getSampleData } from "./getSampleData";
+
 const ChartPage = ({ Namepage, data }) => {
   const [dataSuccess, setDataSuccess] = useState(false);
   const [dataSeries, setDataSeries] = useState(
@@ -39,37 +41,52 @@ const ChartPage = ({ Namepage, data }) => {
   );
   const [isShowProgress, setIsShowProgess] = useState(false);
   //////////////////// PREDICT DATA ///////////////////////
-  const temp = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24,
-  ];
-  const getPredict = () => {
-    setIsShowProgess(true);
-    const dataToSend = {
-      data: temp,
-      type: Namepage,
-    };
-    console.log("data to send: ", dataToSend);
-    // Make a POST request using fetch
-    fetch("http://localhost:8000/predict/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataToSend),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        setIsShowProgess(false);
-        console.log("result from python: ", result);
-        setTempPredict(result.result);
-      })
-      .catch((error) => {
-        setIsShowProgess(false);
+  // const temp = [
+  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+  //   22, 23, 24,
+  // ];
 
-        console.error("Error:", error);
-        alert(error.message);
-      });
+  const getPredict = () => {
+    var type = "";
+    if (Namepage === "Temperature Status") type = "temp";
+    else if (Namepage === "Humidity Status") type = "humi";
+    
+    const fetchDataYesterday = async () => {
+      try {
+        const temperatureValues = await getSampleData(type);
+        const dataToSend = {
+          data: temperatureValues,
+          type: Namepage,
+        };
+        console.log("data to send: ", dataToSend);
+        // Make a POST request using fetch
+        fetch("http://localhost:8000/predict/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            setIsShowProgess(false)
+            console.log("result from python: ", result);
+            setTempPredict(result.result);
+          })
+          .catch((error) => {
+            // Handle errors
+            console.error("Error:", error);
+            alert(error.message);
+          });
+
+      } catch (error) {
+        setIsShowProgess(false)
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchDataYesterday();
+    
   };
 
   console.log("data", data);
