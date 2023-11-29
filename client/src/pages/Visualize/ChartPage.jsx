@@ -44,13 +44,9 @@ const ChartPage = ({ Namepage, data }) => {
   const getPredict = () => {
     const dataToSend = {
       data: temp,
-<<<<<<< HEAD
-    };
-=======
       type: Namepage,
     };
-    console.log("data to send: ", dataToSend)
->>>>>>> develop
+    console.log("data to send: ", dataToSend);
     // Make a POST request using fetch
     fetch("http://localhost:8000/predict/", {
       method: "POST",
@@ -71,6 +67,7 @@ const ChartPage = ({ Namepage, data }) => {
       });
   };
 
+  console.log("data", data);
   useEffect(() => {
     if (selectedDate) {
       const selectedDay = dayjs(selectedDate).format("DD/MM/YYYY");
@@ -111,13 +108,8 @@ const ChartPage = ({ Namepage, data }) => {
           <Paper>
             <Grid container style={{ padding: "10px" }}>
               <Grid item xs={12}>
-<<<<<<< HEAD
-                {(Namepage === "Lighting Status" ||
-                  Namepage === "Humity Status") && (
-=======
                 {(Namepage === "Temperature Status" ||
                   Namepage === "Humidity Status") && (
->>>>>>> develop
                   <Button variant="contained" onClick={getPredict}>
                     Focast
                   </Button>
