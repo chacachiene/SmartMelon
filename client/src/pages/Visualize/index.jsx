@@ -66,8 +66,11 @@ const Visualize = ({ val }) => {
         bgcolor: "background.paper",
         display: "flex",
         height: "100vh",
+        
       }}
+      
     >
+      <Box style={{ paddingTop: '15%' }}>
       <Tabs
         orientation="vertical"
         variant="scrollable"
@@ -97,6 +100,7 @@ const Visualize = ({ val }) => {
           onClick={() => navigate("/visualize/soil_moiture", { replace: true })}
         />
       </Tabs>
+      </Box>
       <TabPanel value={value} index={0}>
         <ChartPage Namepage="Lighting Status" data={light} />
       </TabPanel>
