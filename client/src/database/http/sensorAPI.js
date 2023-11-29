@@ -15,9 +15,12 @@ const sensorAPI = {
         return axiosClient.get(url, options);
     },
     getLastValue(feed_id){
-        console.log("username: ",username)
         const url = `${username}/feeds/${feed_id}/data/last`;
         return axiosClient.get(url, options);
+    },
+    deleteValue(feed_id, id){
+        const url = `${username}/feeds/${feed_id}/data/${id}`;
+        return axiosClient.delete(url, options);
     }
 }
 

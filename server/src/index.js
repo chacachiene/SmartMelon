@@ -14,27 +14,30 @@ import authRoutes from './routes/auth.js'
 import { register } from './controllers/auth.js'
 //import { verifyToken } from 'middleware/auth.js'
 import userRoutes from './routes/user.js'
+import historyRoutes from './routes/history.js'
 
 
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
+ 
 
 dotenv.config()
 
 const app = express()
 app.use(morgan('common'))
+
+
 app.use(cor())
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "30mb", extended: true }))
+app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use("/assets", express.static(path.join(__dirname, 'public/assets')))
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb){
-        cb(null, 'public/assets')
+        cb(null, 'src/public/assets')
     },
     filename: function(req, file, cb){
         cb(null, file.originalname)
@@ -44,9 +47,9 @@ const upload = multer({ storage })
 
 app.post('/auth/register', upload.single('picture'), register)
 
- app.use('/auth', authRoutes)
- app.use('/user', userRoutes)
-
+app.use('/auth', authRoutes)
+app.use('/user', userRoutes)
+app.use('/history', historyRoutes)
 const PORT = process.env.PORT || 6001
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true
 }).then(() => {

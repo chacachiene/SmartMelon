@@ -8,7 +8,7 @@ const initialState = {
 }
 
 export const sensorReducer = createSlice({
-  name: "button",
+  name: "sensor",
   initialState,
   reducers: {
     setLightSensor: (state, action) => {

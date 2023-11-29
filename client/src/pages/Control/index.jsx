@@ -1,91 +1,75 @@
-import axios from "axios"
 import React, { useEffect } from "react"
+import { useSelector } from "react-redux"
 import { Box, useMediaQuery } from "@mui/material"
 import SetTimer from "./SetTimer"
 import SetButton from "./SetButton"
-import { setPumpButton, setLightButton } from "state/button_time"
+
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { publish } from "database/mqtt/mqtt.js"
-import ThresHold from "component/ThresholdForm"
-import sensorAPI from "database/http/sensorAPI"
-import { useDispatch } from "react-redux"
-import { useSelector } from "react-redux"
-import { Stack } from "@mui/material"
 
-//get the value of the light and pump
-import { getLastValue } from "database/http/getAdaData"
-import client from "database/mqtt/mqtt.js"
+import { Stack, Typography } from "@mui/material"
+import ScheduleDataTable from "./ScheduleDataTable"
+
+import { createHistory } from "pages/History/getDataHistory.js"
 
 function Control() {
-  const dispatch = useDispatch()
+  const user= useSelector((state) => state.auth.user)
   const button = useSelector((state) => state.button)
-
-
-  client.on("message", (topic, message, packet) => {
-    const value = Number(message.toString().split(":")[0]);
-    console.log("received message " + topic + ": " + message)
-    const lastSlashIndex = topic.toString().lastIndexOf("/")
-    const name = topic.toString().substring(lastSlashIndex + 1)
-    console.log("name is: ", name)
-    console.log("value is: ", value)
-    if (name === "pump-button") {
-      dispatch(setPumpButton(parseInt(value)))
-    } else if (name === "led-button") {
-      dispatch(setLightButton(parseInt(value)))
-    }
-  })
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try{
-      let pumpStatus = await getLastValue("pump-button")
-      const pumpVar = Number(pumpStatus.split(":")[0]);
-      
-      dispatch(setPumpButton(pumpVar))
-
-      let lightStatus = await getLastValue("led-button")
-      const lightVar = Number(lightStatus.split(":")[0]);
-      dispatch(setLightButton(parseInt(lightVar)))}
-      catch(err){
-        console.log(err)
-      }
-    }
-    fetchData()
-  }, [])
+  
 
   const submitStatus = (type,value) => {
+    var message = ""
     if (type === "pump") {
-      
       publish("pump-button", value.toString()+':1')
+      if(value === 0){
+        message = "Pump is turned off"
+      }else{
+        message = "Pump is turned on with level "+value.toString()
+      }
     } else if (type === "light") {
       publish("led-button", value.toString()+':1')
-      
+      if(value === 0){
+        message = "Light is turned off"
+      }else{
+        message = "Light is turned on with level "+value.toString()
+      }
     }
+    var who= user.firstName + " " + user.lastName;
+    message = message + " by " + who +'.';
+    var offset = +7;
+    const history = {
+      description: message,
+      time: new Date( new Date().getTime() + offset * 3600 * 1000).toISOString().replace( / GMT$/, "" )
+    };
+    createHistory(history);
   }
-
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   return (
-    <div>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Stack spacing={2}>
-          <h1>Set Up Page</h1>
-          <Stack spacing={10}>
-            <Stack direction="row" spacing={20}>
-              <SetTimer type="pump" value="0" />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Box style={{ padding: isSmallScreen ? "10px" : "30px" }}>
+        <Stack spacing={isSmallScreen ? 2 : 6}>
+          <Typography variant="h1">Set Up Page</Typography>
 
-              <Stack direction="row" spacing={6}>
+          <Stack direction={isSmallScreen ? "column" : "row"} spacing={isSmallScreen ? 2 : 6}>
+            <Stack spacing={isSmallScreen ? 2 : 6}>
+              <SetTimer type="pump" value="0" />
+              <SetTimer type="light" value="0" />
+            </Stack>
+
+            <Stack spacing={isSmallScreen ? 4 : 10}>
+              <Stack direction={isSmallScreen ? "column" : "row"} spacing={isSmallScreen ? 2 : 6}>
                 <SetButton type="pump" value={button.pumpButton} afunc={submitStatus} />
                 <SetButton type="light" value={button.lightButton} afunc={submitStatus} />
               </Stack>
+              <ScheduleDataTable />
             </Stack>
-            <SetTimer type="light" value="0" />
           </Stack>
         </Stack>
-      </LocalizationProvider>
-    </div>
-  )
+      </Box>
+    </LocalizationProvider>
+  );
 }
 
 export default Control
