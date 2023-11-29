@@ -49,7 +49,7 @@ const Devices = () => {
                         <Typography variant="body2" sx={{ fontSize: 15 }}>
                         Number of active devices:
                         <br />
-                        {'30/30'}
+                        {'1/1'}
                         </Typography>
                     </CardContent>
                     <CardActions> 
@@ -68,7 +68,7 @@ const Devices = () => {
                     <Typography variant="body2" sx={{ fontSize: 15 }}>
                         Number of active devices:
                         <br />
-                        {'30/30'}
+                        {'1/1'}
                         </Typography>
                     </CardContent>
                     <CardActions> 
@@ -87,7 +87,7 @@ const Devices = () => {
                     <Typography variant="body2" sx={{ fontSize: 15 }}>
                         Number of active devices:
                         <br />
-                        {'30/30'}
+                        {'1/1'}
                         </Typography>
                     </CardContent>
                     <CardActions> 
@@ -106,7 +106,7 @@ const Devices = () => {
                         <Typography variant="body2" sx={{ fontSize: 15 }}>
                         Number of active devices:
                         <br />
-                        {'30/30'}
+                        {'1/1'}
                         </Typography>
                     </CardContent>
                     <CardActions> 
@@ -123,7 +123,7 @@ const Devices = () => {
                         <Typography variant="body2" sx={{ fontSize: 15 }}>
                         Number of active devices:
                         <br />
-                        {'30/30'}
+                        {'1/1'}
                         </Typography>
                     </CardContent>
                     <CardActions> 
@@ -140,7 +140,7 @@ const Devices = () => {
                         <Typography variant="body2" sx={{ fontSize: 15 }}>
                         Number of active devices:
                         <br />
-                        {'30/30'}
+                        {'1/1'}
                         </Typography>
                     </CardContent>
                     <CardActions> 
@@ -157,7 +157,7 @@ const Devices = () => {
                         <Typography variant="body2" sx={{ fontSize: 15 }}>
                         Number of active devices:
                         <br />
-                        {'30/30'}
+                        {'1/1'}
                         </Typography>
                     </CardContent>
                     <CardActions> 
@@ -174,7 +174,7 @@ const Devices = () => {
                         <Typography variant="body2" sx={{ fontSize: 15 }}>
                         Number of active devices:
                         <br />
-                        {'30/30'}
+                        {'1/1'}
                         </Typography>
                     </CardContent>
                     <CardActions> 

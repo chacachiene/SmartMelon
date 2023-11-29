@@ -6,7 +6,7 @@ import {
   Box,
   Button,
   Container,
-  Grid,
+  Grid,   
   Paper,
   Stack,
   Typography,
@@ -44,7 +44,13 @@ const ChartPage = ({ Namepage, data }) => {
   const getPredict = () => {
     const dataToSend = {
       data: temp,
+<<<<<<< HEAD
     };
+=======
+      type: Namepage,
+    };
+    console.log("data to send: ", dataToSend)
+>>>>>>> develop
     // Make a POST request using fetch
     fetch("http://localhost:8000/predict/", {
       method: "POST",
@@ -105,8 +111,13 @@ const ChartPage = ({ Namepage, data }) => {
           <Paper>
             <Grid container style={{ padding: "10px" }}>
               <Grid item xs={12}>
+<<<<<<< HEAD
                 {(Namepage === "Lighting Status" ||
                   Namepage === "Humity Status") && (
+=======
+                {(Namepage === "Temperature Status" ||
+                  Namepage === "Humidity Status") && (
+>>>>>>> develop
                   <Button variant="contained" onClick={getPredict}>
                     Focast
                   </Button>

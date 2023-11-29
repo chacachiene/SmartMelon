@@ -9,7 +9,9 @@ import pickle as pkl
 from tensorflow.keras.models import load_model
 
 class YourPydanticModel(BaseModel):
-    data: List[int]
+    data: List[float]
+    type: str
+
 
 app = FastAPI()
 origins = [
@@ -25,52 +27,35 @@ app.add_middleware(
 
 scaler = MinMaxScaler()
 
-
-def split_series(series, past_num, future_num):
-    X = []
-    y = []
-    i = 0
-    for w in range(len(series)):
-        past_end = w + past_num
-        future_end = past_end + future_num
-        if future_end > len(series):
-            break
-        p, f = series[w:past_end, :], series[past_end:future_end, :]
-        X.append(p)
-        y.append(f)
-    return np.array(X), np.array(y)
-
 past_num = 24
 future_num = 24
 n_feature = 1
-fam = ['temp']
 
-def get_model(data):
+
+def get_model(data, type):
 
     data_array = np.array(data).reshape(-1, 1)
     scaled_use =scaler.fit_transform(data_array)
     
     input_data = np.array(data).reshape((n_feature, future_num, n_feature))
     
-    filenm = 'pred.pickle'
 
-    model = load_model('rnn.h5')
+    if type == 'Humidity Status':
+        model = load_model('humireal.h5')
+    elif type == 'Temperature Status':
+        model = load_model('tempreal.h5')
     print(model.summary())
-    y_pred = model.predict(input_data)
     
-    #y_pred_reverse = pd.DataFrame(scaler.inverse_transform)
+    y_pred = model.predict(input_data)
 
-    y_pred_reverse = pd.DataFrame(scaler.inverse_transform(y_pred.reshape((future_num, n_feature))), columns=fam)
-    # predict.reshape((future_num, n_feature))), columns=fam)
+    y_pred_reverse = pd.DataFrame(scaler.inverse_transform(y_pred.reshape((future_num, n_feature))))
     print(y_pred_reverse)
-    print(type(y_pred_reverse))
-
-    return y_pred_reverse['temp'].tolist()
+    return y_pred_reverse.iloc[:,0].tolist()
 
 @app.post('/predict/')
 async def predict(request: YourPydanticModel):
     # Process the data, for example, just return it as is
-    result = get_model(request.data)
+    result = get_model(request.data, request.type)
     return {"status": "ok", "result": result}
 
 if __name__ == '__main__':
