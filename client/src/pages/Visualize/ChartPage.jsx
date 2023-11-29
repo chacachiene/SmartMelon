@@ -6,11 +6,13 @@ import {
   Box,
   Button,
   Container,
-  Grid,   
+  Grid,
   Paper,
   Stack,
   Typography,
   TextField,
+  CircularProgress,
+  Modal,
 } from "@mui/material";
 import { LineChart } from "@mui/x-charts";
 import styled from "@emotion/styled";
@@ -35,13 +37,14 @@ const ChartPage = ({ Namepage, data }) => {
   const [tempPredict, setTempPredict] = useState(
     Array.from({ length: 24 }, (_, index) => null)
   );
-
+  const [isShowProgress, setIsShowProgess] = useState(false);
   //////////////////// PREDICT DATA ///////////////////////
   const temp = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
     22, 23, 24,
   ];
   const getPredict = () => {
+    setIsShowProgess(true);
     const dataToSend = {
       data: temp,
       type: Namepage,
@@ -57,11 +60,13 @@ const ChartPage = ({ Namepage, data }) => {
     })
       .then((response) => response.json())
       .then((result) => {
+        setIsShowProgess(false);
         console.log("result from python: ", result);
         setTempPredict(result.result);
       })
       .catch((error) => {
-        // Handle errors
+        setIsShowProgess(false);
+
         console.error("Error:", error);
         alert(error.message);
       });
@@ -200,6 +205,17 @@ const ChartPage = ({ Namepage, data }) => {
               </Grid>
             </Grid>
           </Paper>
+          <Modal
+            open={isShowProgress}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress size={80} />
+          </Modal>
         </Container>
       </>
     );
