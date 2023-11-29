@@ -20,7 +20,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox"
 import MailIcon from "@mui/icons-material/Mail"
 import { useNavigate } from "react-router-dom"
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
-
+import Swal from "sweetalert2";
 import { useDispatch } from "react-redux"
 import { setLogout } from "state"
 
@@ -124,7 +124,22 @@ export default function SideBar() {
   const handleDrawerClose = () => {
     setOpen(false)
   }
-
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log me out!",
+      cancelButtonText: "No, keep me here!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(setLogout())
+        navigate("/login")
+      }
+    })
+  }
+  
 
   return (
     <Box sx={{
@@ -173,12 +188,10 @@ export default function SideBar() {
                   px: 2.5,
                 }}
                 {...(item.path === "/login" && {
-                  onClick: () => {
-                    dispatch(setLogout());
-                    navigate(item.path);
-                  },
+                  onClick: handleLogout} )}
+                {...(item.path !== "/login" && {
+                  onClick: () => navigate(item.path),
                 })}
-                to={item.path}
               >
                 <ListItemIcon
                   sx={{
