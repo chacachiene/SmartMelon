@@ -46,6 +46,13 @@ const ChartPage = ({ Namepage, data, threshold }) => {
   const [isShowProgress, setIsShowProgess] = useState(false);
   const [isSettedCurrent, setIsSettedCurrent] = useState(false);
   const [current, setCurrent] = useState(60);
+  const [sensor, setSensor] = useState("Light");
+  useEffect(() => {
+    if (Namepage === "Temperature Status") setSensor("Temperature");
+    if (Namepage === "Humidity Status") setSensor("Humidity");
+    if (Namepage === "Light Status") setSensor("Light");
+    if (Namepage === "Soil moiture Status") setSensor("Moiture");
+  }, [Namepage]);
   const getPredict = () => {
     setIsShowProgess(true);
     var type = "";
@@ -103,7 +110,7 @@ const ChartPage = ({ Namepage, data, threshold }) => {
           dataSeries1[hour - 7] = Number(item.value);
         }
       });
-
+      const today = dayjs();
       if (dataSeries1[0] === null) dataSeries1[0] = 60;
       for (let i = 1; i < 24; i++) {
         if (dataSeries1[i] === null) dataSeries1[i] = dataSeries1[i - 1];
@@ -183,13 +190,17 @@ const ChartPage = ({ Namepage, data, threshold }) => {
                       }}
                     >
                       {current > upper && (
-                        <h3 style={{ color: "red" }}>Status: Too Hight</h3>
+                        <h3 style={{ color: "red" }}>
+                          Status:{sensor} Too Hight{" "}
+                        </h3>
                       )}
                       {current < upper && (
-                        <h3 style={{ color: "red" }}>Status: Too Low</h3>
+                        <h3 style={{ color: "red" }}>
+                          Status:{sensor} Too Low{" "}
+                        </h3>
                       )}
                       {current >= lower && current <= upper && (
-                        <h3>Status: Normal</h3>
+                        <h3>Status:{sensor} Normal</h3>
                       )}
                     </div>
                   </Grid>
@@ -233,11 +244,6 @@ const ChartPage = ({ Namepage, data, threshold }) => {
                     onClick={() => navigate("/control", { replace: true })}
                   >
                     Device Setting
-                  </CustomButton>
-                </ButtonContainer>
-                <ButtonContainer>
-                  <CustomButton color="error" variant="contained">
-                    Return
                   </CustomButton>
                 </ButtonContainer>
               </Grid>
