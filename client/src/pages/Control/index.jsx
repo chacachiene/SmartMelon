@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useSelector } from "react-redux"
-import { Box, useMediaQuery } from "@mui/material"
+import { Box, Container, useMediaQuery } from "@mui/material"
 import SetTimer from "./SetTimer"
 import SetButton from "./SetButton"
 
@@ -47,10 +47,21 @@ function Control() {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Box style={{ padding: isSmallScreen ? "10px" : "30px" }}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}> 
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "50vh", // Optional: To center vertically within the viewport
+          margin: "auto", // Center the Box horizontally
+        }}
+      >
         <Stack spacing={isSmallScreen ? 2 : 6}>
-          <Typography variant="h1">Set Up Page</Typography>
+        <Typography variant="h1" sx={{ paddingTop: '20px' }}>
+            Set Up Page
+          </Typography>
 
           <Stack direction={isSmallScreen ? "column" : "row"} spacing={isSmallScreen ? 2 : 6}>
             <Stack spacing={isSmallScreen ? 2 : 6}>
