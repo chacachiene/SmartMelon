@@ -16,3 +16,4 @@ export const getLastValue = async (feed) => {
     console.error(error)
   }
 }
+

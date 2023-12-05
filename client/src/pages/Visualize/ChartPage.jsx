@@ -47,6 +47,7 @@ const ChartPage = ({ Namepage, data, threshold }) => {
   const [isSettedCurrent, setIsSettedCurrent] = useState(false);
   const [current, setCurrent] = useState(60);
   const [sensor, setSensor] = useState("Light");
+  const today = dayjs();
   useEffect(() => {
     if (Namepage === "Temperature Status") setSensor("Temperature");
     if (Namepage === "Humidity Status") setSensor("Humidity");
@@ -97,12 +98,14 @@ const ChartPage = ({ Namepage, data, threshold }) => {
     fetchDataYesterday();
   };
 
-  console.log("data", data);
   useEffect(() => {
     if (selectedDate) {
       const selectedDay = dayjs(selectedDate).format("DD/MM/YYYY");
 
       setDataSeries1(Array.from({ length: 24 }, (_, index) => null));
+      const today = dayjs().format("DD/MM/YYYY");
+      const thisHour = dayjs().format("H");
+
       data.forEach((item) => {
         const date = dayjs(item.created_at).format("DD/MM/YYYY");
         if (date === selectedDay) {
@@ -110,15 +113,22 @@ const ChartPage = ({ Namepage, data, threshold }) => {
           dataSeries1[hour - 7] = Number(item.value);
         }
       });
-      const today = dayjs();
+
       if (dataSeries1[0] === null) dataSeries1[0] = 60;
-      for (let i = 1; i < 24; i++) {
-        if (dataSeries1[i] === null) dataSeries1[i] = dataSeries1[i - 1];
+      if (today === selectedDay) {
+        for (let i = 1; i <= thisHour; i++) {
+          if (dataSeries1[i] === null) dataSeries1[i] = dataSeries1[i - 1];
+        }
+      } else {
+        for (let i = 1; i < 24; i++) {
+          if (dataSeries1[i] === null) dataSeries1[i] = dataSeries1[i - 1];
+        }
       }
       if (!isSettedCurrent) {
         setCurrent(dataSeries1[dayjs().format("H")]);
         setIsSettedCurrent(true);
       }
+
       const tempDataSeries = [...dataSeries1];
       setDataSuccess(true);
       setDataSeries(tempDataSeries);
@@ -178,6 +188,7 @@ const ChartPage = ({ Namepage, data, threshold }) => {
                       <DatePicker
                         value={selectedDate}
                         onChange={handleDateChange}
+                        maxDate={today}
                       />
                     </LocalizationProvider>
                   </Grid>

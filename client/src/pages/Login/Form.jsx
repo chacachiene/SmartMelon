@@ -11,6 +11,9 @@ import Dropzone from "react-dropzone"
 import FlexBetween from "component/FlexBetween"
 import {Alert} from "component/Alert/index"
 import Swal from "sweetalert2"
+
+import { createHistory } from "pages/History/getDataHistory.js"
+
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("First Name is required"),
   lastName: yup.string().required("Last Name is required"),
@@ -92,7 +95,7 @@ const Form = () => {
     const data = await res.json()
     onSubmitProps.resetForm()
     // get status of data
-    console.log(res.status)
+    
     if (res.status === 400) {
       // if(data.message === "User does not exist")
         Alert("err")
@@ -101,20 +104,26 @@ const Form = () => {
     }
     else if (res.status === 200) {
       if (data){
-      dispatch(
-        setLogin({
-          user: data.user,
-          token: data.token,
-        }),
-      )
-      Alert(data.user)
-      // wait 3 seconds before redirecting to dashboard
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 3000);
+        dispatch(
+          setLogin({
+            user: data.user,
+            token: data.token,
+          }),
+        )
+        Alert(data.user)
+        // wait 3 seconds before redirecting to dashboard
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 3000);
+      
+        var offset = +7;
+        const history = {
+          description: data.user.firstName + ' ' + data.user.lastName + ' logged in',
+          time: new Date( new Date().getTime() + offset * 3600 * 1000).toISOString().replace( / GMT$/, "" )
+        };
+        createHistory(history);
       }
-    } 
-
+    }
   }
 
   const handleFormSubmit = async (values, onSubmitProps) => {

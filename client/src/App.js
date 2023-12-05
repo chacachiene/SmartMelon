@@ -5,11 +5,11 @@ import DashBoard from "pages/Dashboard"
 import LayOut from "component/Layout"
 
 import Login from "pages/Login"
-import SetUp from "pages/Threshold/ThresholdGeneralSetting"
+
 import Control from "pages/Control"
 import Visualize from "pages/Visualize"
-import Threshold from "pages/Threshold"
 import History from "pages/History/History"
+import ThresholdGeneral from "pages/Threshold"
 
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
@@ -17,8 +17,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material"
 import { createTheme } from "@mui/material/styles"
 import { themeSettings } from "theme"
 import "./index.css"
-import ThresholdGeneral from "pages/Threshold"
-import ChartPage from "pages/Visualize/ChartPage"
+
 
 import { setLightSensor, setMoisSensor, setTempSensor, setHumiSensor } from "state/sensor"
 import { useDispatch } from "react-redux"
@@ -36,6 +35,7 @@ import { setLightTime, setPumpTime } from "state/clock"
 
 import { getNum, getNoti } from "pages/Noti/getNoti"
 import { setPumpButton, setLightButton } from "state/button_time"
+
 function App() {
   const mode = useSelector((state) => state.auth.mode)
   const user = Boolean(useSelector((state) => state.auth.user))
@@ -215,11 +215,14 @@ function App() {
         console.log(err)
       }
     }
+
+    // fetchDataHistory()
     fetchDataButton()
     fetchAllDataSensor()
     fetchAllDataClock()
     fetchDataSensor()
     fetchDataThreshold()
+
 
   }, [])
 
