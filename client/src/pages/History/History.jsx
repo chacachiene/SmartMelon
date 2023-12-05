@@ -9,13 +9,15 @@ const History = () => {
     const [openModal, setOpenModal] = useState(false); 
     const [currentPage, setCurrentPage] = useState(1); 
     const [historyArr, setHistoryArr] = useState([]);
-    const entriesPerPage = 5; 
-
+    
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(8);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [keyChoosen, setKeyChoosen] = useState(null);
+    const [timeChoosen, setTimeChoosen] = useState(null);
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
     };
+    const entriesPerPage = 5; 
   
     const handleChangeRowsPerPage = (event) => {
       setRowsPerPage(+event.target.value);
@@ -44,13 +46,24 @@ const History = () => {
     const modalContent = (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h6" fontSize={20} mb={2}>
-            Modal Content
+            Detail content
           </Typography>
           <div style={{ marginBottom: '8px', flexGrow: 1 }}>
             <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec elit ac elit fermentum cursus. Duis vel urna eu lacus lacinia sagittis. Proin eget sapien quis eros iaculis vulputate.
+              {historyArr.map((each) => {
+                if (each._id === keyChoosen) {
+                  return each.description;
+                }
+              })}
             </Typography>
           </div>
+          <div style={{ marginBottom: '8px', flexGrow: 1 }}>
+            <Typography>
+              at: {timeChoosen}
+            </Typography>
+          </div>
+
+
           <Button variant="contained" onClick={() => setOpenModal(false)} style={{ alignSelf: 'flex-end' }}>
             Close
           </Button>
@@ -75,7 +88,12 @@ const History = () => {
 
         console.log('Filtered Results:', filteredHistory);
       };
-  
+    const handleOpenModal = (key, time) => {
+      console.log("key",key);
+        setKeyChoosen(key);
+        setTimeChoosen(time);
+        setOpenModal(true);
+      };
     return (
       <Container>
         <Grid container spacing={3} alignItems="center" justifyContent="space-between" marginBottom={4}>
@@ -105,7 +123,6 @@ const History = () => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((each) => 
               {
-
                     let createdDate = new Date(each.time);
 
                     // Format date to "YYYY-MM-DD HH:mm:ss"
@@ -119,11 +136,11 @@ const History = () => {
                       timeZone: 'UTC' // Assuming the original date string is in UTC
                     });
                 return (
-                <TableRow key={each.id}>
+                <TableRow key={each._id}>
                   <TableCell>{formattedtime}</TableCell>
                   <TableCell>{each.description}</TableCell>
                   <TableCell>
-                    <Button variant="contained" onClick={() => setOpenModal(true)}>
+                    <Button variant="contained" onClick={() => handleOpenModal(each._id, formattedtime)}>
                       View
                     </Button>
                   </TableCell>
