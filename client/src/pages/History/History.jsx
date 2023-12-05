@@ -2,12 +2,27 @@ import React, { useState,useEffect } from 'react';
 import SearchBar from './SearchBar';
 import { Container, Grid, Typography, Button, Table, TableBody, TableCell, TableHead, TableRow, Modal, Pagination, Paper } from '@mui/material';
 import {getAll } from './getDataHistory.js'
+import TablePagination from '@mui/material/TablePagination';
+import TableContainer from '@mui/material/TableContainer';
 
 const History = () => {
     const [openModal, setOpenModal] = useState(false); 
     const [currentPage, setCurrentPage] = useState(1); 
     const [historyArr, setHistoryArr] = useState([]);
+    
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [keyChoosen, setKeyChoosen] = useState(null);
+    const [timeChoosen, setTimeChoosen] = useState(null);
+    const handleChangePage = (event, newPage) => {
+      setPage(newPage);
+    };
     const entriesPerPage = 5; 
+  
+    const handleChangeRowsPerPage = (event) => {
+      setRowsPerPage(+event.target.value);
+      setPage(0);
+    };
   
     // Dummy data for the board
     // const historyArr = [
@@ -31,13 +46,24 @@ const History = () => {
     const modalContent = (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h6" fontSize={20} mb={2}>
-            Modal Content
+            Detail content
           </Typography>
           <div style={{ marginBottom: '8px', flexGrow: 1 }}>
             <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec elit ac elit fermentum cursus. Duis vel urna eu lacus lacinia sagittis. Proin eget sapien quis eros iaculis vulputate.
+              {historyArr.map((each) => {
+                if (each._id === keyChoosen) {
+                  return each.description;
+                }
+              })}
             </Typography>
           </div>
+          <div style={{ marginBottom: '8px', flexGrow: 1 }}>
+            <Typography>
+              at: {timeChoosen}
+            </Typography>
+          </div>
+
+
           <Button variant="contained" onClick={() => setOpenModal(false)} style={{ alignSelf: 'flex-end' }}>
             Close
           </Button>
@@ -62,7 +88,12 @@ const History = () => {
 
         console.log('Filtered Results:', filteredHistory);
       };
-  
+    const handleOpenModal = (key, time) => {
+      console.log("key",key);
+        setKeyChoosen(key);
+        setTimeChoosen(time);
+        setOpenModal(true);
+      };
     return (
       <Container>
         <Grid container spacing={3} alignItems="center" justifyContent="space-between" marginBottom={4}>
@@ -73,10 +104,11 @@ const History = () => {
           </Grid>
           <Grid item xs={12} md={6}>
         <SearchBar onSearch={handleSearch} />
-      </Grid>
+        </Grid>
         </Grid>
   
         <Paper elevation={3}>
+        <TableContainer sx={{ maxHeight: '600px' }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -86,32 +118,55 @@ const History = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {historyArr.map((each) => (
-                <TableRow key={each.id}>
-                  <TableCell>{each.time}</TableCell>
+              {historyArr
+              .sort((a, b) => new Date(b.time) - new Date(a.time))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((each) => 
+              {
+                    let createdDate = new Date(each.time);
+
+                    // Format date to "YYYY-MM-DD HH:mm:ss"
+                    let formattedtime = createdDate.toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      timeZone: 'UTC' // Assuming the original date string is in UTC
+                    });
+                return (
+                <TableRow key={each._id}>
+                  <TableCell>{formattedtime}</TableCell>
                   <TableCell>{each.description}</TableCell>
                   <TableCell>
-                    <Button variant="contained" onClick={() => setOpenModal(true)}>
+                    <Button variant="contained" onClick={() => handleOpenModal(each._id, formattedtime)}>
                       View
                     </Button>
                   </TableCell>
                 </TableRow>
-              ))}
+                );
+              })}
             </TableBody>
           </Table>
-        </Paper>
+        </TableContainer>    
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
-        <Pagination
-          count={Math.ceil(historyArr.length / entriesPerPage)}
-          page={currentPage}
-          onChange={(event, page) => paginate(page)}/>
-        </div>
-  
-        <Modal open={openModal} onClose={() => setOpenModal(false)}>
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px' }}>
-            {modalContent}
+        <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={historyArr.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        />
           </div>
-        </Modal>
+        </Paper>
+          <Modal open={openModal} onClose={() => setOpenModal(false)}>
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px' }}>
+              {modalContent}
+            </div>
+          </Modal>
       </Container>
     );
   };
