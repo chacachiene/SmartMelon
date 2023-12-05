@@ -1,19 +1,13 @@
 import React, { useState } from "react"
 import ThresholdGeneralSetting from "./ThresholdGeneralSetting"
-
 import { publish } from "database/mqtt/mqtt.js"
-import { useDispatch, useSelector } from "react-redux"
-import { setLghtThreshold, setMoisThreshold, setHumiThreshold, setTempThreshold } from "state/threshold"
-
-
+import { createHistory } from "pages/History/getDataHistory"
+import { useSelector } from "react-redux"
 const Threshold = () => {
-
+  const user = useSelector((state) => state.auth.user)
   const handleSubmit = (values) => {
-    console.log("submitting")
-    console.log(values)
     publish("threshold", values)
   }
-
 
   return (
     <div>

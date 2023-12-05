@@ -14,6 +14,7 @@ import authRoutes from './routes/auth.js'
 import { register } from './controllers/auth.js'
 //import { verifyToken } from 'middleware/auth.js'
 import userRoutes from './routes/user.js'
+import historyRoutes from './routes/history.js'
 
 
 
@@ -48,7 +49,7 @@ app.post('/auth/register', upload.single('picture'), register)
 
 app.use('/auth', authRoutes)
 app.use('/user', userRoutes)
-
+app.use('/history', historyRoutes)
 const PORT = process.env.PORT || 6001
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true
 }).then(() => {
