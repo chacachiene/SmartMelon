@@ -100,8 +100,9 @@ const History = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {historyArr.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              {historyArr
               .sort((a, b) => new Date(b.time) - new Date(a.time))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((each) => 
               {
 
