@@ -26,7 +26,7 @@ import { blue } from "@mui/material/colors";
 import { getSampleData } from "./getSampleData";
 import { useNavigate } from "react-router-dom";
 
-const ChartPage = ({ Namepage, data, threshold }) => {
+const ChartPage = ({ Namepage, data, threshold, current }) => {
   const [dataSuccess, setDataSuccess] = useState(false);
   const lower = Number(threshold[0]);
   const upper = Number(threshold[1]);
@@ -44,8 +44,7 @@ const ChartPage = ({ Namepage, data, threshold }) => {
     Array.from({ length: 24 }, (_, index) => null)
   );
   const [isShowProgress, setIsShowProgess] = useState(false);
-  const [isSettedCurrent, setIsSettedCurrent] = useState(false);
-  const [current, setCurrent] = useState(60);
+
   const [sensor, setSensor] = useState("Light");
   const today = dayjs();
   useEffect(() => {
@@ -109,8 +108,8 @@ const ChartPage = ({ Namepage, data, threshold }) => {
       data.forEach((item) => {
         const date = dayjs(item.created_at).format("DD/MM/YYYY");
         if (date === selectedDay) {
-          const hour = dayjs(item.created_at).format("H");
-          dataSeries1[hour - 7] = Number(item.value);
+          const hour = Number(dayjs(item.created_at).format("HH"));
+          dataSeries1[hour] = Number(item.value);
         }
       });
 
@@ -123,10 +122,6 @@ const ChartPage = ({ Namepage, data, threshold }) => {
         for (let i = 1; i < 24; i++) {
           if (dataSeries1[i] === null) dataSeries1[i] = dataSeries1[i - 1];
         }
-      }
-      if (!isSettedCurrent) {
-        setCurrent(dataSeries1[dayjs().format("H")]);
-        setIsSettedCurrent(true);
       }
 
       const tempDataSeries = [...dataSeries1];
@@ -202,16 +197,16 @@ const ChartPage = ({ Namepage, data, threshold }) => {
                     >
                       {current > upper && (
                         <h3 style={{ color: "red" }}>
-                          Status:{sensor} Too Hight{" "}
+                          Status: {sensor} Too Hight{" "}
                         </h3>
                       )}
-                      {current < upper && (
+                      {current < lower && (
                         <h3 style={{ color: "red" }}>
-                          Status:{sensor} Too Low{" "}
+                          Status: {sensor} Too Low{" "}
                         </h3>
                       )}
                       {current >= lower && current <= upper && (
-                        <h3>Status:{sensor} Normal</h3>
+                        <h3>Status: {sensor} Normal</h3>
                       )}
                     </div>
                   </Grid>
@@ -234,7 +229,11 @@ const ChartPage = ({ Namepage, data, threshold }) => {
 
               <Grid item xs={2}>
                 <ButtonContainer>
-                  <CustomButton color="success" variant="contained">
+                  <CustomButton
+                    color="success"
+                    variant="contained"
+                    onClick={() => navigate("/history", { replace: true })}
+                  >
                     History
                   </CustomButton>
                 </ButtonContainer>
