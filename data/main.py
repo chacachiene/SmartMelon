@@ -39,7 +39,6 @@ def get_model(data, type):
     
     input_data = np.array(data).reshape((n_feature, future_num, n_feature))
     
-
     if type == 'Humidity Status':
         model = load_model('humireal.h5')
     elif type == 'Temperature Status':
