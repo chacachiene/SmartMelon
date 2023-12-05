@@ -8,7 +8,7 @@ import QuantityInput from "component/ThresholdInput"
 import Swal from "sweetalert2";
 
 import { useSelector, useDispatch } from "react-redux"
-
+import { createHistory } from "pages/History/getDataHistory.js"
 
 const ThresholdGeneralSetting = ({submitOnDb}) => {
   const [sensor, setSensor] = useState("Soll Moisure Sensor")
@@ -19,7 +19,7 @@ const ThresholdGeneralSetting = ({submitOnDb}) => {
   const moisThreshold = useSelector((state) => state.threshold.mois)
   const tempThreshold = useSelector((state) => state.threshold.temp)
   const humiThreshold = useSelector((state) => state.threshold.humi)
-
+  const user = useSelector((state) => state.auth.user)
   const handleSquareClick = (square, nameSensor) => {
     setSelectedSquare(square)
     setSensor(nameSensor)
@@ -53,7 +53,7 @@ const ThresholdGeneralSetting = ({submitOnDb}) => {
       if (result.isConfirmed) {
         console.log(upper, lower)
       console.log(selectedSquare)
-      var value = upper.toString() + ':' + lower.toString()
+      var value = lower.toString() + ':' + upper.toString()
       if (selectedSquare === 1) {
         submitOnDb("M" + value)
       } else if (selectedSquare === 2) {
@@ -65,12 +65,19 @@ const ThresholdGeneralSetting = ({submitOnDb}) => {
       else if (selectedSquare === 4) {
         submitOnDb("T" + value)
       }
-  
         Swal.fire({
           title: "Submitted!",
           text: `${datastring} threshold has been submitted.`,
           icon: "success",
         });
+        var who= user.firstName + " " + user.lastName;
+        var message = datastring + " threshold has been set between " + lower.toString() + " and " + upper.toString() + " by "+who+ "."
+        var offset = +7;
+        const history = {
+          description: message,
+          time: new Date( new Date().getTime() + offset * 3600 * 1000).toISOString().replace( / GMT$/, "" )
+        };
+        createHistory(history);
       }
     });
   };
@@ -82,22 +89,23 @@ const ThresholdGeneralSetting = ({submitOnDb}) => {
     setLower(v)
   }
   useEffect(() => {
+    console.log(lightThreshold, moisThreshold, tempThreshold, humiThreshold)
     if (selectedSquare === 1) {
-      setUpper(parseInt(moisThreshold[0]))
-      setLower(parseInt(moisThreshold[1]))
+      setUpper(parseInt(moisThreshold[1]))
+      setLower(parseInt(moisThreshold[0]))
     } else if (selectedSquare === 2) {
-      setUpper(parseInt(lightThreshold[0]))
-      setLower(parseInt(lightThreshold[1]))
+      setUpper(parseInt(lightThreshold[1]))
+      setLower(parseInt(lightThreshold[0]))
     }
     else if (selectedSquare === 3) {
-      setUpper(parseInt(humiThreshold[0]))
-      setLower(parseInt(humiThreshold[1]))
+      setUpper(parseInt(humiThreshold[1]))
+      setLower(parseInt(humiThreshold[0]))
     }
     else if (selectedSquare === 4) {
-      setUpper(parseInt(tempThreshold[0]))
-      setLower(parseInt(tempThreshold[1]))
+      setUpper(parseInt(tempThreshold[1]))
+      setLower(parseInt(tempThreshold[0]))
     }
-  } , [selectedSquare])
+  } , [selectedSquare,moisThreshold])
 
   return (
     <Container>

@@ -46,11 +46,15 @@ const Visualize = ({ val }) => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(val);
   const temp = useSelector((state) => state.visualize.temp);
-
   const humi = useSelector((state) => state.visualize.humi);
   const light = useSelector((state) => state.visualize.light);
   const mois = useSelector((state) => state.visualize.mois);
 
+  const tempThreshold = useSelector((state) => state.threshold.temp);
+  const humiThreshold = useSelector((state) => state.threshold.humi);
+  const moisThreshold = useSelector((state) => state.threshold.mois);
+  const lightThreshold = useSelector((state) => state.threshold.light);
+  console.log(tempThreshold, humiThreshold, moisThreshold, lightThreshold)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -86,7 +90,7 @@ const Visualize = ({ val }) => {
           onClick={() => navigate("/visualize/temperature", { replace: true })}
         />
         <Tab
-          label="Humity"
+          label="Humidity"
           {...a11yProps(2)}
           onClick={() => navigate("/visualize/humity", { replace: true })}
         />
@@ -105,7 +109,7 @@ const Visualize = ({ val }) => {
       </TabPanel>
 
       <TabPanel value={value} index={2}>
-        <ChartPage Namepage="Humity Status" data={humi} />
+        <ChartPage Namepage="Humidity Status" data={humi} />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <ChartPage Namepage="Soil moiture Status" data={mois} />

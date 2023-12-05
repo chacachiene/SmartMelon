@@ -31,7 +31,7 @@ import { setMode, setLogout } from "state"
 import { useNavigate } from "react-router-dom"
 import FlexBetween from "component/FlexBetween"
 import Noti from "pages/Noti"
-
+import Swal from "sweetalert2"
 function NavBar() {
   
   const dispatch = useDispatch()
@@ -46,7 +46,21 @@ function NavBar() {
   const name = user.firstName + " " + user.lastName
 
 
-  
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log me out!",
+      cancelButtonText: "No, keep me here!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(setLogout())
+        navigate("/login")
+      }
+    })
+  }
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -90,7 +104,7 @@ function NavBar() {
                 </FlexBetween>
                 <Menu {...bindMenu(popupState)}>
                   {/* onClick={popupState.close} maybe use later */}
-                  <MenuItem onClick ={() => dispatch(setLogout())}>Log Out</MenuItem>
+                  <MenuItem onClick ={handleLogout}>Log Out</MenuItem>
                 </Menu>
               </React.Fragment>
             )}
@@ -122,7 +136,7 @@ function NavBar() {
                 <MenuItem onClick={popupState.close}>
                 <Noti />
                 </MenuItem>
-                <MenuItem onClick ={() => dispatch(setLogout())}>Logout</MenuItem>
+                <MenuItem onClick ={handleLogout}>Logout</MenuItem>
               </Menu>
             </React.Fragment>
           )}
