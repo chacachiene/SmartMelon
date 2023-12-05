@@ -164,22 +164,26 @@ function App() {
         const humi = [];
         const light = [];
         const mois = [];
+        // new Date( new Date().getTime() + offset * 3600 * 1000).toISOString().replace( / GMT$/, "" )
+
 
         temp_humi.forEach((item, index) => {
           const [value1, value2] = item.value.split(":");
-
-          temp.push({ created_at: item.created_at, value: parseFloat(value1) });
-          humi.push({ created_at: item.created_at, value: parseFloat(value2) });
+          var time = new Date(item.created_at).toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" })
+          temp.push({ created_at: time, value: parseFloat(value1) });
+          humi.push({ created_at: time, value: parseFloat(value2) });
         });
         lightData.forEach((item, index) => {
+          var time = new Date(item.created_at).toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" })
           light.push({
-            created_at: item.created_at,
+            created_at: time,
             value: parseFloat(item.value),
           });
         });
         moisData.forEach((item, index) => {
+          var time = new Date(item.created_at).toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" })
           mois.push({
-            created_at: item.created_at,
+            created_at: time,
             value: parseFloat(item.value),
           });
         });

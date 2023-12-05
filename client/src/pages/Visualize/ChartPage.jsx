@@ -24,9 +24,13 @@ import dayjs from "dayjs";
 import { blue } from "@mui/material/colors";
 
 import { getSampleData } from "./getSampleData";
+import { useNavigate } from "react-router-dom";
 
-const ChartPage = ({ Namepage, data }) => {
+const ChartPage = ({ Namepage, data, threshold, current }) => {
   const [dataSuccess, setDataSuccess] = useState(false);
+  const lower = Number(threshold[0]);
+  const upper = Number(threshold[1]);
+  const navigate = useNavigate();
   const [dataSeries, setDataSeries] = useState(
     Array.from({ length: 24 }, (_, index) => null)
   );
@@ -40,19 +44,21 @@ const ChartPage = ({ Namepage, data }) => {
     Array.from({ length: 24 }, (_, index) => null)
   );
   const [isShowProgress, setIsShowProgess] = useState(false);
-  //////////////////// PREDICT DATA ///////////////////////
-  // const temp = [
-  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-  //   22, 23, 24,
-  // ];
 
+  const [sensor, setSensor] = useState("Light");
+  const today = dayjs();
+  useEffect(() => {
+    if (Namepage === "Temperature Status") setSensor("Temperature");
+    if (Namepage === "Humidity Status") setSensor("Humidity");
+    if (Namepage === "Light Status") setSensor("Light");
+    if (Namepage === "Soil moiture Status") setSensor("Moiture");
+  }, [Namepage]);
   const getPredict = () => {
-
     setIsShowProgess(true);
     var type = "";
     if (Namepage === "Temperature Status") type = "temp";
     else if (Namepage === "Humidity Status") type = "humi";
-    
+
     const fetchDataYesterday = async () => {
       try {
         const temperatureValues = await getSampleData(type);
@@ -71,6 +77,7 @@ const ChartPage = ({ Namepage, data }) => {
         })
           .then((response) => response.json())
           .then((result) => {
+            setIsShowProgess(false);
             console.log("result from python: ", result);
             setTempPredict(result.result);
             setIsShowProgess(false);
@@ -81,62 +88,42 @@ const ChartPage = ({ Namepage, data }) => {
             alert(error.message);
             setIsShowProgess(false);
           });
-
       } catch (error) {
-        console.error('Error fetching data:', error);
+        setIsShowProgess(false);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchDataYesterday();
-    
-
-    // setIsShowProgess(true);
-    // const dataToSend = {
-    //   data: temp,
-    //   type: Namepage,
-    // };
-    // console.log("data to send: ", dataToSend);
-    // // Make a POST request using fetch
-    // fetch("http://localhost:8000/predict/", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(dataToSend),
-    // })
-    //   .then((response) => response.json())
-    //   .then((result) => {
-    //     setIsShowProgess(false);
-    //     console.log("result from python: ", result);
-    //     setTempPredict(result.result);
-    //   })
-    //   .catch((error) => {
-    //     setIsShowProgess(false);
-
-    //     console.error("Error:", error);
-    //     alert(error.message);
-    //   });
-
   };
 
-  console.log("data", data);
   useEffect(() => {
     if (selectedDate) {
       const selectedDay = dayjs(selectedDate).format("DD/MM/YYYY");
 
       setDataSeries1(Array.from({ length: 24 }, (_, index) => null));
+      const today = dayjs().format("DD/MM/YYYY");
+      const thisHour = dayjs().format("H");
+
       data.forEach((item) => {
         const date = dayjs(item.created_at).format("DD/MM/YYYY");
         if (date === selectedDay) {
-          const hour = dayjs(item.created_at).format("H");
-          dataSeries1[hour - 7] = Number(item.value);
+          const hour = Number(dayjs(item.created_at).format("HH"));
+          dataSeries1[hour] = Number(item.value);
         }
       });
 
       if (dataSeries1[0] === null) dataSeries1[0] = 60;
-      for (let i = 1; i < 24; i++) {
-        if (dataSeries1[i] === null) dataSeries1[i] = dataSeries1[i - 1];
+      if (today === selectedDay) {
+        for (let i = 1; i <= thisHour; i++) {
+          if (dataSeries1[i] === null) dataSeries1[i] = dataSeries1[i - 1];
+        }
+      } else {
+        for (let i = 1; i < 24; i++) {
+          if (dataSeries1[i] === null) dataSeries1[i] = dataSeries1[i - 1];
+        }
       }
+
       const tempDataSeries = [...dataSeries1];
       setDataSuccess(true);
       setDataSeries(tempDataSeries);
@@ -196,6 +183,7 @@ const ChartPage = ({ Namepage, data }) => {
                       <DatePicker
                         value={selectedDate}
                         onChange={handleDateChange}
+                        maxDate={today}
                       />
                     </LocalizationProvider>
                   </Grid>
@@ -207,7 +195,19 @@ const ChartPage = ({ Namepage, data }) => {
                         alignItems: "center",
                       }}
                     >
-                      <h3>Status: Normal</h3>
+                      {current > upper && (
+                        <h3 style={{ color: "red" }}>
+                          Status: {sensor} Too Hight{" "}
+                        </h3>
+                      )}
+                      {current < lower && (
+                        <h3 style={{ color: "red" }}>
+                          Status: {sensor} Too Low{" "}
+                        </h3>
+                      )}
+                      {current >= lower && current <= upper && (
+                        <h3>Status: {sensor} Normal</h3>
+                      )}
                     </div>
                   </Grid>
                   <Grid item xs={4}>
@@ -218,7 +218,7 @@ const ChartPage = ({ Namepage, data }) => {
                         alignItems: "center",
                       }}
                     >
-                      <h3>Current: 80%</h3>
+                      <h3>Current: {current}</h3>
                       <Button>
                         <Cached fontSize="large" />
                       </Button>
@@ -229,24 +229,31 @@ const ChartPage = ({ Namepage, data }) => {
 
               <Grid item xs={2}>
                 <ButtonContainer>
-                  <CustomButton color="success" variant="contained">
+                  <CustomButton
+                    color="success"
+                    variant="contained"
+                    onClick={() => navigate("/history", { replace: true })}
+                  >
                     History
                   </CustomButton>
                 </ButtonContainer>
 
                 <ButtonContainer>
-                  <CustomButton color="success" variant="contained">
+                  <CustomButton
+                    color="success"
+                    variant="contained"
+                    onClick={() => navigate("/setup", { replace: true })}
+                  >
                     Threshold Setting
                   </CustomButton>
                 </ButtonContainer>
                 <ButtonContainer>
-                  <CustomButton color="success" variant="contained">
+                  <CustomButton
+                    color="success"
+                    variant="contained"
+                    onClick={() => navigate("/control", { replace: true })}
+                  >
                     Device Setting
-                  </CustomButton>
-                </ButtonContainer>
-                <ButtonContainer>
-                  <CustomButton color="error" variant="contained">
-                    Return
                   </CustomButton>
                 </ButtonContainer>
               </Grid>

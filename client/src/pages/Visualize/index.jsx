@@ -54,7 +54,11 @@ const Visualize = ({ val }) => {
   const humiThreshold = useSelector((state) => state.threshold.humi);
   const moisThreshold = useSelector((state) => state.threshold.mois);
   const lightThreshold = useSelector((state) => state.threshold.light);
-  console.log(tempThreshold, humiThreshold, moisThreshold, lightThreshold)
+  
+  const lastTemp = useSelector((state) => state.sensor.temp);
+  const lastHumi = useSelector((state) => state.sensor.humi);
+  const lastMois = useSelector((state) => state.sensor.mois);
+  const lastLight = useSelector((state) => state.sensor.light);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -102,17 +106,38 @@ const Visualize = ({ val }) => {
       </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <ChartPage Namepage="Lighting Status" data={light} />
+        <ChartPage
+          Namepage="Lighting Status"
+          data={light}
+          threshold={lightThreshold}
+          current = {lastLight}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ChartPage Namepage="Temperature Status" data={temp} />
+        <ChartPage
+          Namepage="Temperature Status"
+          data={temp}
+          threshold={tempThreshold}
+          current = {lastTemp}
+        />
       </TabPanel>
 
       <TabPanel value={value} index={2}>
-        <ChartPage Namepage="Humidity Status" data={humi} />
+        <ChartPage
+          Namepage="Humidity Status"
+          data={humi}
+          threshold={humiThreshold}
+          current = {lastHumi}
+          
+        />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <ChartPage Namepage="Soil moiture Status" data={mois} />
+        <ChartPage
+          Namepage="Soil moiture Status"
+          data={mois}
+          threshold={moisThreshold}
+          current = {lastMois}
+        />
       </TabPanel>
     </Box>
   );
