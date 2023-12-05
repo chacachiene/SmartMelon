@@ -9,6 +9,10 @@ import { Formik } from "formik"
 import * as yup from "yup"
 import Dropzone from "react-dropzone"
 import FlexBetween from "component/FlexBetween"
+import {Alert} from "component/Alert/index"
+import Swal from "sweetalert2"
+
+import { createHistory } from "pages/History/getDataHistory.js"
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("First Name is required"),
@@ -62,22 +66,24 @@ const Form = () => {
     for (let v in values) {
       formData.append(v, values[v])
     }
-    formData.append("picturePath", values.picture.name)
+    formData.append("picture", values.picture.name)
     console.log(formData)
     const res = await fetch("http://localhost:5000/auth/register", {
       method: "POST",
       body: formData,
     })
-
-    const data = await res.json()
+    // const data = await res.json()
     onSubmitProps.resetForm()
-    if (data) {
+    if (res.status === 400) {
+        Alert("err")
+    }
+    else if(res.status === 201){
+      Alert("success")
       setPageType("login")
     }
   }
 
   const login = async (values, onSubmitProps) => {
-    console.log(values)
     const res = await fetch("http://localhost:5000/auth/login", {
       method: "POST",
       headers: {
@@ -85,17 +91,38 @@ const Form = () => {
       },
       body: JSON.stringify(values),
     })
-    console.log(res)
+
     const data = await res.json()
     onSubmitProps.resetForm()
-    if (data) {
-      dispatch(
-        setLogin({
-          user: data.user,
-          token: data.token,
-        }),
-      )
-      navigate("/dashboard")
+    // get status of data
+    
+    if (res.status === 400) {
+      // if(data.message === "User does not exist")
+        Alert("err")
+      // else if(data.message === "Incorrect Password")
+      //   Alert("err")
+    }
+    else if (res.status === 200) {
+      if (data){
+        dispatch(
+          setLogin({
+            user: data.user,
+            token: data.token,
+          }),
+        )
+        Alert(data.user)
+        // wait 3 seconds before redirecting to dashboard
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 3000);
+      
+        var offset = +7;
+        const history = {
+          description: data.user.firstName + ' ' + data.user.lastName + ' logged in',
+          time: new Date( new Date().getTime() + offset * 3600 * 1000).toISOString().replace( / GMT$/, "" )
+        };
+        createHistory(history);
+      }
     }
   }
 

@@ -19,7 +19,8 @@ import ListItemText from "@mui/material/ListItemText"
 import InboxIcon from "@mui/icons-material/MoveToInbox"
 import MailIcon from "@mui/icons-material/Mail"
 import { useNavigate } from "react-router-dom"
-
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import Swal from "sweetalert2";
 import { useDispatch } from "react-redux"
 import { setLogout } from "state"
 
@@ -34,7 +35,7 @@ import {
 
 } from "@mui/icons-material"
 
-const drawerWidth = 240
+const drawerWidth = 320
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -103,11 +104,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
 
 const key = [
   { text: "Overview", path: "/dashboard" },
-  { text: "Energy Management", path: "/visualize" },
+  { text: "Energy Management", path: "/visualize/light" },
   { text: "Device", path: "/setup" },
   { text: "Control", path: "/control" },
   { text: "Logout", path: "/login" },
-]
+];
 
 export default function SideBar() {
   const navigate = useNavigate()
@@ -123,28 +124,58 @@ export default function SideBar() {
   const handleDrawerClose = () => {
     setOpen(false)
   }
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log me out!",
+      cancelButtonText: "No, keep me here!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(setLogout())
+        navigate("/login")
+      }
+    })
+  }
+  
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{
+      display: "flex",
+    }}>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          {open ? (
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          ) : (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                ...(open && { display: "none" }),
-              }}
+              {open ? (
+          <>
+            <Typography
+              fontWeight="bold"
+              fontSize="clamp(1.5rem, 2vw, 2rem)"
+              color="primary"
+              paddingRight="4rem"
+              onClick={() => navigate("/dashboard")}
             >
-              <MenuIcon />
+              SmartMelon
+            </Typography>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}   
             </IconButton>
+          </>
+        ) : (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              ...(open && { display: "none" }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
           )}
+          
         </DrawerHeader>
         <Divider />
         <List>
@@ -157,12 +188,10 @@ export default function SideBar() {
                   px: 2.5,
                 }}
                 {...(item.path === "/login" && {
-                  onClick: () => {
-                    dispatch(setLogout());
-                    navigate(item.path);
-                  },
+                  onClick: handleLogout} )}
+                {...(item.path !== "/login" && {
+                  onClick: () => navigate(item.path),
                 })}
-                to={item.path}
               >
                 <ListItemIcon
                   sx={{
@@ -172,7 +201,7 @@ export default function SideBar() {
                   }}
                 >
                   {item.text === "Overview" && <AssessmentOutlined />}
-                  {item.text === "Energy Management" && <ManageSearchOutlined />}
+                  {item.text === "Energy Management" && <AutoGraphIcon />}
                   {item.text === "Device" && <MemoryOutlined />}
                   {item.text === "Control" && <TuneOutlined />}
                   {item.text === "Logout" && <PowerSettingsNewOutlined />}

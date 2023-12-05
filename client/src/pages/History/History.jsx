@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import SearchBar from './SearchBar';
 import { Container, Grid, Typography, Button, Table, TableBody, TableCell, TableHead, TableRow, Modal, Pagination, Paper } from '@mui/material';
+import {getAll } from './getDataHistory.js'
 
 const History = () => {
     const [openModal, setOpenModal] = useState(false); 
     const [currentPage, setCurrentPage] = useState(1); 
+    const [historyArr, setHistoryArr] = useState([]);
     const entriesPerPage = 5; 
   
     // Dummy data for the board
-    const historyArr = [
-      { id: 0, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
-      { id: 1, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
-      { id: 2, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
-      { id: 3, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
-      { id: 4, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
-      { id: 5, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
-    ];
+    // const historyArr = [
+    //   { id: 0, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
+    //   { id: 1, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
+    //   { id: 2, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
+    //   { id: 3, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
+    //   { id: 4, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
+    //   { id: 5, time: '2023-11-26', description: 'Lorem ipsum dolor sit amet' },
+    // ];
+    useEffect(() => {
+      const fetchData = async () => {
+        const data = await getAll();
+        setHistoryArr(data);
+      }
+      fetchData();
+      console.log(historyArr);
+    }, []);
   
     // Dummy modal content
     const modalContent = (
