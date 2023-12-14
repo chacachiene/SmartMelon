@@ -2,7 +2,6 @@ import axios from "axios"
 
 const client = axios.create({
   baseURL: process.env.REACT_APP_ADAFRUIT_URL,
-
   headers: {
     "Content-Type": "application/json",
     Authorization: "Bearer " + localStorage.getItem("token"),
