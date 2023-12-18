@@ -24,12 +24,18 @@ import storage from "redux-persist/lib/storage"
 import { PersistGate } from "redux-persist/integration/react"
 
 import { combineReducers } from "redux"
+import { disableReactDevTools } from "@fvilers/disable-react-devtools"
 
+// deploy
+if (process.env.NODE_ENV === "production") {
+  disableReactDevTools()
+}
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
 }
+
 
 const rootReducer = combineReducers({
   auth: persistReducer(persistConfig, authReducer),
@@ -47,8 +53,9 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
+      }
     }),
+  devTools: false
 })
 
 const root = ReactDOM.createRoot(document.getElementById("root"))

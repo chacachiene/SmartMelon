@@ -2,7 +2,8 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",
-        "baseUrl": "./src"
+        // "baseUrl": "./src"
+        "baseUrl": "https://smartmelon.onrender.com/src/"
     },
     "include": ["src/**/*"]
 }
